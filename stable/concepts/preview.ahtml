@@ -442,6 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#preview_handshake">Preview handshake</a></li>
+<li><a href="#authentication_and_permissions">Authentication and permissions</a></li>
 <li><a href="#render_modes">Render modes</a></li>
 <li><a href="#editing_annotations">Editing annotations</a></li>
 <li><a href="#component_refresh">Component refresh</a></li>
@@ -469,18 +470,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The app selects a named front-end URL and shared secret.</p>
 </li>
 <li>
-<p>The app forwards the request with the render mode, XP project, XP base URL, and editor session context.</p>
+<p>The app forwards the request with the render mode, XP project, XP base URL, and the current editor&#8217;s XP session.</p>
 </li>
 <li>
 <p>The Next.js <code>/api/preview</code> route validates the token, enables Next.js Draft Mode, and redirects to the content path.</p>
 </li>
 <li>
-<p>The adapter detects edit mode and queries the <code>draft</code> branch.</p>
+<p>The adapter detects edit mode, forwards the XP session to Guillotine, and queries the <code>draft</code> branch.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
 <p>The app caches the resulting Next.js preview cookie and reuses it for later preview and component requests.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="authentication_and_permissions"><a class="link" href="#authentication_and_permissions">Authentication and permissions</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Preview is available only through an authenticated Enonic Content Studio session. For every preview request, the Next.XP app passes the current editor&#8217;s XP session to the Next.js front end over the protected server-to-server integration. The adapter then forwards that session as the <code>JSESSIONID</code> cookie on its Guillotine request.</p>
+</div>
+<div class="paragraph">
+<p>Guillotine therefore evaluates the draft query as the same Enonic user who opened the preview. XP&#8217;s normal content permissions remain in effect: the rendered result contains only content that user is allowed to access. The front end does not query draft content through a privileged service account or bypass XP access controls.</p>
+</div>
+<div class="paragraph">
+<p>The shared API token and the Next.js Draft Mode cookie have different purposes. The token authenticates calls between the Next.XP app and the protected front-end endpoints, while the Draft Mode cookie selects draft rendering. Neither replaces the editor&#8217;s XP identity or grants access to content by itself.</p>
 </div>
 </div>
 </div>
@@ -555,7 +570,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:24:29 UTC
+Last updated 2026-08-06 11:52:32 UTC
 </div>
 </div>
 </body>

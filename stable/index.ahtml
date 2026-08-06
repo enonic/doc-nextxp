@@ -564,9 +564,9 @@ Looking for a guided introduction? Follow our <a href="https://developer.enonic.
 <td class="tableblock halign-left valign-top"><p class="tableblock">Next.js starter template representing canonical adapter usage — the recommended starting point for new projects.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Next.XP app (<code>app-nextxp</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/enonic/app-nextxp">GitHub</a> / <a href="https://market.enonic.com">Enonic Market</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">XP application for the back-end: enables front-end preview in Content Studio and holds the front-end server configuration.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Next.XP app</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://market.enonic.com/vendors/enonic/next.xp">Enonic Market</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">XP application for authenticated front-end preview in Content Studio and revalidation of published content.</p></td>
 </tr>
 </tbody>
 </table>
@@ -662,7 +662,7 @@ Looking for a guided introduction? Follow our <a href="https://developer.enonic.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:24:29 UTC
+Last updated 2026-08-06 11:52:32 UTC
 </div>
 </div>
 </body>

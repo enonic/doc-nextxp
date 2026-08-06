@@ -441,8 +441,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#responsibilities">Responsibilities</a></li>
-<li><a href="#scope">Scope</a></li>
+<li><a href="#install_and_connect">Install and connect</a></li>
+<li><a href="#what_the_app_provides">What the app provides</a>
+<ul class="sectlevel2">
+<li><a href="#authenticated_preview">Authenticated preview</a></li>
+<li><a href="#published_content_revalidation">Published-content revalidation</a></li>
+</ul>
+</li>
+<li><a href="#division_of_responsibility">Division of responsibility</a></li>
 </ul>
 </div>
 </div>
@@ -450,58 +456,97 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Next.XP app is installed in Enonic XP and added to sites rendered by Next.js. It bridges Content Studio and the external front end; public visitors still access Next.js directly.</p>
+<p>The Next.XP app is the Enonic XP companion to a Next.js front end. Install it from <a href="https://market.enonic.com/vendors/enonic/next.xp">Enonic Market</a> and add it to each XP site rendered through Next.XP.</p>
+</div>
+<div class="paragraph">
+<p>The app connects Content Studio to the external front end. It makes the Next.js site available to editors for authenticated preview and notifies the front end when published content must be revalidated. Public visitors still access Next.js directly.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="responsibilities"><a class="link" href="#responsibilities">Responsibilities</a></h2>
+<h2 id="install_and_connect"><a class="link" href="#install_and_connect">Install and connect</a></h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install <strong>Next.XP</strong> from <a href="https://market.enonic.com/vendors/enonic/next.xp">Enonic Market</a> into Enonic XP 8.</p>
+</li>
+<li>
+<p>Ensure Guillotine is installed and configured for every project the front end will query.</p>
+</li>
+<li>
+<p>Add the Next.XP app to the XP site.</p>
+</li>
+<li>
+<p>Define at least one front-end URL and shared secret as described in <a href="app/configuration.ahtml">Configuration</a>.</p>
+</li>
+<li>
+<p>Select that front-end configuration in the site&#8217;s Next.XP form, then save the site.</p>
+</li>
+<li>
+<p>Open the site in Content Studio and verify that preview loads the Next.js front end.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The application that owns the site&#8217;s content types and page components remains a separate XP application.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what_the_app_provides"><a class="link" href="#what_the_app_provides">What the app provides</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="authenticated_preview"><a class="link" href="#authenticated_preview">Authenticated preview</a></h3>
+<div class="paragraph">
+<p>The app proxies Content Studio page and component requests to Next.js. It carries the current editor&#8217;s XP session, render mode, project, and site context, then adapts the response for Content Studio. Guillotine queries are consequently performed with the authenticated editor&#8217;s permissions.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="app/preview.ahtml">Preview</a> for the request flow, protected front-end endpoints, and component refresh behavior.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="published_content_revalidation"><a class="link" href="#published_content_revalidation">Published-content revalidation</a></h3>
+<div class="paragraph">
+<p>The app listens for published XP content changes and calls the selected front end&#8217;s protected revalidation endpoint. This lets Next.js refresh affected routes while continuing to serve the public site through its normal hosting and cache infrastructure.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="app/revalidation.ahtml">Revalidation</a> for event and path handling.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="division_of_responsibility"><a class="link" href="#division_of_responsibility">Division of responsibility</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The app:</p>
+<p>The Next.XP app does not render the public website or replace Guillotine:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Adds a site configuration field for selecting a named Next.js server</p>
+<p>Enonic XP and Content Studio manage content and page composition.</p>
 </li>
 <li>
-<p>Proxies Content Studio page and component preview requests</p>
+<p>Guillotine exposes that content to the front end.</p>
 </li>
 <li>
-<p>Supplies render mode, project, base URL, and editor session context</p>
+<p>The Next.js application and adapter fetch and render the website.</p>
 </li>
 <li>
-<p>Rewrites proxied asset and application URLs for Content Studio</p>
-</li>
-<li>
-<p>Triggers Next.js revalidation after published content changes</p>
+<p>The Next.XP app supplies the bridge required for editor preview and cache revalidation.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Most implementation logic is supplied by the bundled <code>lib-nextxp</code> XP library. The app provides the installable application identity, site descriptors, configuration selector, and event subscription.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="scope"><a class="link" href="#scope">Scope</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The proxy accepts draft-branch editing traffic and rejects live-mode proxying. It is not intended to serve the public site. This separation allows the Next.js deployment and its CDN to handle visitor traffic normally.</p>
-</div>
-<div class="paragraph">
-<p>The application ID is <code>com.enonic.app.nextxp</code>; its configuration file is <code>com.enonic.app.nextxp.cfg</code>.</p>
-</div>
-<div class="paragraph">
-<p>See <a href="app/installation.ahtml">Installation</a>, <a href="app/configuration.ahtml">App configuration</a>, <a href="app/preview.ahtml">Preview proxy</a>, and <a href="app/revalidation.ahtml">Revalidation</a>.</p>
+<p>After installation, use <a href="app/configuration.ahtml">Configuration</a> to define the reachable Next.js deployments and secure their protected endpoints.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:24:29 UTC
+Last updated 2026-08-06 11:52:32 UTC
 </div>
 </div>
 </body>

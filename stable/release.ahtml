@@ -469,6 +469,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="next_xp_5"><a class="link" href="#next_xp_5">Next.XP 5</a></h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>This is an XP8 compatibility release, allowing you to upgrade to XP8 with minimal changes to your Next.XP 4 project.</p>
+</div>
 <div class="sect2">
 <h3 id="enonic_xp_8_support"><a class="link" href="#enonic_xp_8_support">Enonic XP 8 support</a></h3>
 <div class="paragraph">
@@ -569,7 +572,7 @@ Use <code>useLocaleContext</code> hook in client-side components and <code>I18n<
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:24:29 UTC
+Last updated 2026-08-06 11:52:32 UTC
 </div>
 </div>
 </body>
