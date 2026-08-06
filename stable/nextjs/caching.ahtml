@@ -516,12 +516,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>The token configured in <code>ENONIC_API_TOKEN</code> must remain server-side because it authorizes cache invalidation.</p>
 </div>
+<div class="paragraph">
+<p>See <a href="../app/revalidation.ahtml">Revalidation</a> for the XP-side event handling and delivery flow.</p>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 10:04:46 UTC
+Last updated 2026-08-06 11:24:29 UTC
 </div>
 </div>
 </body>

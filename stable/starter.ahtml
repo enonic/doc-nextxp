@@ -441,7 +441,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#usage">Usage</a></li>
 <li><a href="#included_integration">Included integration</a></li>
+<li><a href="#application_routes">Application routes</a></li>
+<li><a href="#integration_routes">Integration routes</a></li>
+<li><a href="#components_and_data">Components and data</a></li>
+<li><a href="#public_files_and_proxy_matching">Public files and proxy matching</a></li>
 <li><a href="#what_to_customize">What to customize</a></li>
 </ul>
 </div>
@@ -458,8 +463,46 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
+<h2 id="usage"><a class="link" href="#usage">Usage</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new project from <a href="https://github.com/enonic/starter-nextjs"><code>enonic/starter-nextjs</code></a> without copying its Git history:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">npx degit enonic/starter-nextjs my-nextjs-site
+cd my-nextjs-site
+npm install</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configure the Enonic API, application name, project mappings, and shared preview secret as described in <a href="starter/configuration.ahtml">Starter configuration</a>, then start the development server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">npm run dev</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Follow the <a href="https://developer.enonic.com/learn/next.xp">Next.XP tutorial</a> for a guided implementation that builds a complete site from the starter.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="included_integration"><a class="link" href="#included_integration">Included integration</a></h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The starter follows the Next.js App Router layout. Next.XP-specific files are concentrated in the catch-all route, component registry, locale proxy, phrase directory, and API routes.</p>
+</div>
 <div class="paragraph">
 <p>The project provides:</p>
 </div>
@@ -494,23 +537,116 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
+<h2 id="application_routes"><a class="link" href="#application_routes">Application routes</a></h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/[locale]/[[&#8230;&#8203;contentPath]]/page.tsx</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fetches XP content, validates the result, renders <code>MainView</code>, supplies metadata, and optionally generates static paths.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/[locale]/[[&#8230;&#8203;contentPath]]/layout.tsx</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Handles complete-page and single-component responses and preserves editor HTML during hydration.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/[locale]/layout.tsx</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Loads server-side phrases and establishes the locale-level document layout.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/[locale]/not-found.tsx</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Locale-aware missing-content UI.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/[locale]/error.tsx</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Locale-aware runtime error UI.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="integration_routes"><a class="link" href="#integration_routes">Integration routes</a></h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/api/preview/route.ts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Validates the shared token, enables Draft Mode, and redirects Content Studio to the requested path.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/api/renderable/route.ts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Reports whether content and component descriptors have explicit render mappings.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/api/revalidate/route.ts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accepts secured publication notifications and calls <code>revalidatePath()</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/proxy.ts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Resolves locale mappings and rewrites paths without a locale segment.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="components_and_data"><a class="link" href="#components_and_data">Components and data</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>src/components/_mappings.ts</code> imports the adapter&#8217;s base mappings, registers the shared query, and maps application descriptors. Keep queries close to their consuming views; shared data belongs under <code>src/components/queries/</code>.</p>
+</div>
+<div class="paragraph">
+<p>Static front-end dictionaries live in <code>src/phrases/&lt;locale&gt;.json</code>. The <code>@phrases</code> alias is configured in <code>next.config.js</code> for webpack and Turbopack.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="public_files_and_proxy_matching"><a class="link" href="#public_files_and_proxy_matching">Public files and proxy matching</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The locale proxy excludes Next.js internals, API routes, and known public assets. When adding a top-level folder under <code>public/</code>, add it to the matcher exclusion so asset requests are not interpreted as content routes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="what_to_customize"><a class="link" href="#what_to_customize">What to customize</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Replace the example application name, project mappings, common query, phrases, and views. Register each content type and page component used by the site. Preserve the integration routes and editing wrappers unless the replacement implements the same contracts.</p>
 </div>
 <div class="paragraph">
-<p>The starter is not the tutorial&#8217;s completed example. The finished reference implementation lives in <a href="https://github.com/enonic/demo-nextjs"><code>demo-nextjs</code></a>, while the <a href="https://developer.enonic.com/learn/next.xp">Next.XP tutorial</a> explains the implementation step by step.</p>
+<p>The starter is not the tutorial&#8217;s completed example. The finished reference implementation lives in <a href="https://github.com/enonic/demo-nextjs"><code>demo-nextjs</code></a>.</p>
 </div>
 <div class="paragraph">
-<p>See <a href="starter/project-structure.ahtml">Project structure</a> and <a href="starter/configuration.ahtml">Starter configuration</a>.</p>
+<p>See <a href="starter/configuration.ahtml">Starter configuration</a> for environment variables, the shared secret, component mappings, and rendering choices.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 10:04:46 UTC
+Last updated 2026-08-06 11:24:29 UTC
 </div>
 </div>
 </body>

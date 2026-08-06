@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>Next.XP</title>
+<title>Next.js + Enonic XP = Next.XP</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,7 +437,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Next.XP</h1>
+<h1>Next.js + Enonic XP = Next.XP</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Next.XP is Enonic&#8217;s standard integration between <a href="https://nextjs.org/docs">Next.js</a> and <a href="https://developer.enonic.com/docs/platform">Enonic XP</a>.</p>
+<p>Optimized out-of-the-box integration between <a href="https://nextjs.org/docs">Next.js</a> and <a href="https://developer.enonic.com/docs/platform">Enonic XP</a>.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -463,7 +463,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Looking for a guided introduction? Follow the <a href="https://developer.enonic.com/learn/next.xp">Next.XP tutorial</a> to build a complete site step by step. This documentation is the product reference and can be read in any order.
+Looking for a guided introduction? Follow our <a href="https://developer.enonic.com/learn/nextjs">Next.js tutorial</a> to build a complete site step by step. This documentation is the product reference and can be read in any order.
 </td>
 </tr>
 </table>
@@ -662,7 +662,7 @@ Looking for a guided introduction? Follow the <a href="https://developer.enonic.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 10:04:46 UTC
+Last updated 2026-08-06 11:24:29 UTC
 </div>
 </div>
 </body>

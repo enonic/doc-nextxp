@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>Services and mappings</title>
+<title>Revalidation</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,14 +437,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Services and mappings</h1>
+<h1>Revalidation</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#site_mappings">Site mappings</a></li>
-<li><a href="#configuration_service">Configuration service</a></li>
-<li><a href="#revalidation_events">Revalidation events</a></li>
-<li><a href="#front_end_endpoints">Front-end endpoints</a></li>
+<li><a href="#content_events">Content events</a></li>
+<li><a href="#paths_and_projects">Paths and projects</a></li>
+<li><a href="#front_end_endpoint">Front-end endpoint</a></li>
+<li><a href="#configuration_and_security">Configuration and security</a></li>
 </ul>
 </div>
 </div>
@@ -452,103 +452,67 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Next.XP app contributes controller mappings, a configuration-selector service, and a content-event subscriber. Together they implement the XP side of preview and revalidation.</p>
+<p>The Next.XP app notifies the Next.js front end when published XP content changes. This allows statically generated or cached routes to be refreshed without sending public traffic through XP.</p>
+</div>
+<div class="paragraph">
+<p>Revalidation is independent of the Content Studio preview proxy: preview reads current draft content through Next.js Draft Mode, while revalidation updates the public cache after content is published.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="site_mappings"><a class="link" href="#site_mappings">Site mappings</a></h2>
+<h2 id="content_events"><a class="link" href="#content_events">Content events</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The site descriptor maps site requests and component-service requests to <code>/lib/nextxp/proxy.js</code>. The proxy:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Selects the front-end URL and token from the site configuration.</p>
-</li>
-<li>
-<p>Converts the XP editing URL into a site-relative Next.js path.</p>
-</li>
-<li>
-<p>Forwards render mode, project, XP base URL, session cookie, and query parameters.</p>
-</li>
-<li>
-<p>Obtains and caches the Next.js Draft Mode cookie.</p>
-</li>
-<li>
-<p>Follows controlled redirects and retries expired preview sessions.</p>
-</li>
-<li>
-<p>Rewrites HTML, JavaScript, CSS, and asset URLs for Content Studio.</p>
-</li>
-<li>
-<p>Extracts a single-component response for incremental editor refresh.</p>
-</li>
-</ul>
+<p>The app subscribes to XP repository and node events for projects containing a site configured with Next.XP. Published changes are sent to the front end selected by that site&#8217;s configuration.</p>
 </div>
 <div class="paragraph">
-<p>The proxy runs only for the <code>draft</code> branch and rejects <code>live</code> mode. Public requests should go to Next.js directly.</p>
+<p>The subscriber runs on the XP cluster master so a clustered installation does not send the same notification from every node. Bulk events are debounced before the front end is called.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration_service"><a class="link" href="#configuration_service">Configuration service</a></h2>
+<h2 id="paths_and_projects"><a class="link" href="#paths_and_projects">Paths and projects</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code>configurations</code> XP service backs the site form&#8217;s CustomSelector. It returns each configured name and URL; secrets are not included in the selector response.</p>
+<p>Normal publish events invalidate the affected content path. Move and rename events also retain the previous path, allowing both the old and new public routes to be invalidated.</p>
+</div>
+<div class="paragraph">
+<p>The active XP project is sent in the <code>Content-Studio-Project</code> header. The front end uses it to resolve the correct locale and project mapping before invalidating paths.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="revalidation_events"><a class="link" href="#revalidation_events">Revalidation events</a></h2>
+<h2 id="front_end_endpoint"><a class="link" href="#front_end_endpoint">Front-end endpoint</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>On the XP cluster master, the app subscribes to repository and node events for projects containing a site configured with Next.XP. Published changes call the selected front end&#8217;s <code>/api/revalidate</code> route.</p>
+<p>The app calls the protected <code>/api/revalidate</code> route on the selected Next.js front end. The starter provides the canonical route handler; a custom front end must implement the same integration contract.</p>
 </div>
 <div class="paragraph">
-<p>Bulk events are debounced. Move and rename events retain the old content path so both old and new cached routes can be invalidated. The active XP project is passed in the <code>Content-Studio-Project</code> header.</p>
+<p>The handler validates the shared token and applies Next.js path revalidation to the affected routes. The front end remains responsible for its caching policy and for any additional tags or application-specific caches.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="../nextjs/caching.ahtml">Caching and revalidation</a> for the corresponding Next.js behavior.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="front_end_endpoints"><a class="link" href="#front_end_endpoints">Front-end endpoints</a></h2>
+<h2 id="configuration_and_security"><a class="link" href="#configuration_and_security">Configuration and security</a></h2>
 <div class="sectionbody">
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 40%;">
-<col style="width: 60%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Endpoint</th>
-<th class="tableblock halign-left valign-top">Called for</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/api/preview</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Establishing Next.js Draft Mode.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/api/renderable</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Checking whether content or a component has an explicit mapping.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/api/revalidate</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Invalidating published Next.js paths.</p></td>
-</tr>
-</tbody>
-</table>
 <div class="paragraph">
-<p>All endpoints must validate the shared token.</p>
+<p>The destination URL and token come from the site&#8217;s selected entry in <code>com.enonic.app.nextxp.cfg</code>. The token must match <code>ENONIC_API_TOKEN</code> in the front-end deployment, and <code>/api/revalidate</code> must reject requests with an invalid token.</p>
+</div>
+<div class="paragraph">
+<p>XP must be able to reach the configured URL from the cluster master. Use HTTPS outside a trusted local network and use a unique secret for every shared or production environment.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="configuration.ahtml">App configuration</a> for the target and secret properties.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 10:04:46 UTC
+Last updated 2026-08-06 11:24:29 UTC
 </div>
 </div>
 </body>

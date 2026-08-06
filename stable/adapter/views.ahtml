@@ -452,6 +452,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#basecomponent">BaseComponent</a></li>
 <li><a href="#basemacro">BaseMacro</a></li>
 <li><a href="#region">Region</a></li>
+<li><a href="#regionview">RegionView</a></li>
 <li><a href="#richtextview">RichTextView</a></li>
 <li><a href="#fragment">Fragment</a></li>
 <li><a href="#singlecomponent">SingleComponent</a></li>
@@ -461,19 +462,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#text">Text</a></li>
 <li><a href="#defaultmacro">DefaultMacro</a></li>
 <li><a href="#disablemacro">DisableMacro</a></li>
+<li><a href="#missingcomponent">MissingComponent</a></li>
+<li><a href="#errorcomponent">ErrorComponent</a></li>
+<li><a href="#placeholdercomponent">PlaceholderComponent</a></li>
+<li><a href="#shouldshowmissingview">shouldShowMissingView</a></li>
+<li><a href="#shouldshowerrorview">shouldShowErrorView</a></li>
+<li><a href="#shouldshowplaceholderview">shouldShowPlaceholderView</a></li>
 </ul>
 </li>
 <li><a href="#classes">Classes</a></li>
 <li><a href="#view-type-definitions">Type Definitions</a>
 <ul class="sectlevel2">
+<li><a href="#page-component">PageComponent</a></li>
+<li><a href="#page-data">PageData</a></li>
+<li><a href="#layout-data">LayoutData</a></li>
+<li><a href="#part-data">PartData</a></li>
+<li><a href="#fragment-data">FragmentData</a></li>
+<li><a href="#text-data">TextData</a></li>
+<li><a href="#rich-text-data">RichTextData</a></li>
+<li><a href="#macro-data">MacroData</a></li>
+<li><a href="#region-tree">RegionTree</a></li>
+<li><a href="#fetch-content-result">FetchContentResult</a></li>
 <li><a href="#page-props">PageProps</a></li>
 <li><a href="#layout-props">LayoutProps</a></li>
 <li><a href="#part-props">PartProps</a></li>
-<li><a href="#rich-text-view-props">RichTextViewProps</a></li>
-<li><a href="#region-props">RegionProps</a></li>
+<li><a href="#macro-props">MacroProps</a></li>
 </ul>
 </li>
-<li><a href="#constants">Constants</a></li>
+<li><a href="#constants">Constants</a>
+<ul class="sectlevel2">
+<li><a href="#macro_disable">MACRO_DISABLE</a></li>
+<li><a href="#macro_embed">MACRO_EMBED</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -481,7 +502,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Each built-in view is a default export below <code>@enonic/nextjs-adapter/views/</code>. Import only the view needed by the module.</p>
+<p>The adapter&#8217;s built-in React views turn a normalized XP page tree into React elements. Each file below is a separate entry point under <code>@enonic/nextjs-adapter/views/</code>; import the default or named export from the file that defines it.</p>
+</div>
+<div class="paragraph">
+<p>Most applications call only <code>MainView</code>. The remaining views form its rendering pipeline and are useful when replacing or composing the default behavior.</p>
 </div>
 </div>
 </div>
@@ -491,94 +515,853 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-tsx" data-lang="tsx">import MainView from '@enonic/nextjs-adapter/views/MainView';
-import Regions from '@enonic/nextjs-adapter/views/Region';
+import Regions, {RegionView} from '@enonic/nextjs-adapter/views/Region';
 import RichTextView from '@enonic/nextjs-adapter/views/RichTextView';</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>MainView</code> accepts the complete result from <code>fetchContent()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-tsx" data-lang="tsx">const result = await fetchContent({contentPath, locale});
+
+return &lt;MainView {...result}/&gt;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mapped page, layout, part, and macro views do not receive the built-in views' input objects. The adapter resolves each component first and passes the mapping-specific props documented under <a href="#view-type-definitions">Type Definitions</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="functions"><a class="link" href="#functions">Functions</a></h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>The views are React function components. Their reusable props shapes are listed under <a href="#view-type-definitions">Type Definitions</a>.</p>
-</div>
 <div class="sect2">
 <h3 id="mainview"><a class="link" href="#mainview">MainView</a></h3>
 <div class="paragraph">
-<p>Entry point for <code>FetchContentResult</code>; selects full-content or single-component rendering.</p>
+<p>Main rendering entry point. It renders <code>SingleComponent</code> for a Content Studio component request and otherwise delegates to <code>BaseContent</code>.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>MainView()</code> takes a single <code>props</code> object with the <a href="#fetch-content-result">FetchContentResult</a> properties.</p>
+</div>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="basecontent"><a class="link" href="#basecontent">BaseContent</a></h3>
 <div class="paragraph">
-<p>Chooses a content-type view or delegates to the mapped page.</p>
+<p>Chooses the registered content-type view for <code>meta.type</code>. If no explicit content-type view takes precedence, it delegates to the page descriptor through <code>BasePage</code>; a catch-all content-type view is the final fallback.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>BaseContent()</code> takes a single <code>props</code> object with the <a href="#fetch-content-result">FetchContentResult</a> properties.</p>
+</div>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="basepage"><a class="link" href="#basepage">BasePage</a></h3>
 <div class="paragraph">
-<p>Resolves and renders the mapped XP page descriptor from <a href="#page-props">PageProps</a>.</p>
+<p>Resolves an XP page descriptor in <code>ComponentRegistry</code> and renders the registered view with <a href="#page-props">PageProps</a>. In development or Content Studio it can render a missing-component or error view instead.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>BasePage()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>component</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#page-data">PageData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Normalized page descriptor, configuration, template, and regions.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Path of the page component in the XP page tree.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the page mapping&#8217;s query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Error produced while resolving the page.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="baselayout"><a class="link" href="#baselayout">BaseLayout</a></h3>
 <div class="paragraph">
-<p>Resolves a layout descriptor and passes <a href="#layout-props">LayoutProps</a> with normalized regions to the mapped view.</p>
+<p>Resolves an XP layout descriptor in <code>ComponentRegistry</code>, normalizes its regions, and renders the registered layout view with <a href="#layout-props">LayoutProps</a>.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>BaseLayout()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>component</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#layout-data">LayoutData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Normalized layout descriptor and configuration.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Path of the layout component in the XP page tree.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#region-tree">RegionTree</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Regions belonging to the layout.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="basepart"><a class="link" href="#basepart">BasePart</a></h3>
 <div class="paragraph">
-<p>Resolves a part descriptor and passes <a href="#part-props">PartProps</a> with processed data to the mapped view.</p>
+<p>Resolves an XP part descriptor in <code>ComponentRegistry</code> and renders the registered part view with <a href="#part-props">PartProps</a>.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>BasePart()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>component</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#part-data">PartData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Normalized part descriptor, configuration, and queried fields.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Path of the part component in the XP page tree.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the part mapping&#8217;s query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Error produced while resolving the part.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="basecomponent"><a class="link" href="#basecomponent">BaseComponent</a></h3>
 <div class="paragraph">
-<p>Renders one normalized XP component and adds Content Studio attributes in edit mode.</p>
+<p>Dispatches one normalized component to the registered component-kind view, such as <code>BasePage</code>, <code>BaseLayout</code>, <code>BasePart</code>, or <code>Text</code>. In edit mode it also adds the <code>data-portal-component-type</code> annotation expected by Content Studio.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>BaseComponent()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>component</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#page-component">PageComponent</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Normalized component containing its type, tree path, component data, and optional processed data.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="basemacro"><a class="link" href="#basemacro">BaseMacro</a></h3>
 <div class="paragraph">
-<p>Resolves a macro mapping and retains macro editing behavior.</p>
+<p>Resolves a rich-text macro in <code>ComponentRegistry</code>. In edit mode it preserves macro syntax unless <code>renderInEditMode</code> is enabled; macro configuration values are normalized before reaching the mapped view.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>BaseMacro()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>children</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ReactNode</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Content enclosed by the macro.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Omit&lt;</code><a href="#macro-data"><code>MacroData</code></a>`, 'ref'&gt;`</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Macro name, descriptor, and Guillotine configuration.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>renderInEditMode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Render the mapped macro inside Content Studio instead of preserving its source syntax. Default: <code>false</code>.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="region"><a class="link" href="#region">Region</a></h3>
 <div class="paragraph">
-<p>Renders all regions or one named region while preserving component order. <code>RegionView</code> is the named export for rendering one <a href="#region-props">RegionProps</a> object directly.</p>
+<p>The default export from <code>views/Region</code>, imported under any local name such as <code>Regions</code>. It renders every region on a page, or one region selected by <code>name</code>.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>Region()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#page-data">PageData</a> or <code>null</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Page containing the regions to render.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Render only the region with this name.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="regionview"><a class="link" href="#regionview">RegionView</a></h3>
+<div class="paragraph">
+<p>Named export from <code>views/Region</code>. It renders one region, orders its components by their numeric component-path index, and adds the <code>data-portal-region</code> annotation in edit mode.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>RegionView()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>XP region name.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>components</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#page-component">PageComponent</a>`[]`</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Components in the region.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>className</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> CSS class applied to the region&#8217;s <code>div</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
+</div>
+<div class="paragraph lead">
+<p>Example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-tsx" data-lang="tsx">&lt;RegionView
+    name="main"
+    components={layout.regions?.main?.components}
+    common={common}
+    meta={meta}
+/&gt;</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="richtextview"><a class="link" href="#richtextview">RichTextView</a></h3>
 <div class="paragraph">
-<p>Renders <a href="#rich-text-view-props">RichTextViewProps</a> as processed rich text, internal links, images, macros, and custom replacements.</p>
+<p>Renders processed Guillotine rich text through <code>@enonic/react-components</code>. It adapts internal links, images, and macros to Next.XP URL processing and editing behavior.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>RichTextView()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#rich-text-data">RichTextData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Processed HTML plus referenced links, images, and macros returned by the adapter&#8217;s rich-text query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context used for URLs and annotations.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>className</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> CSS class applied to the rich-text wrapper.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tag</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> HTML element used as the wrapper.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>renderMacroInEditMode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Render mapped macros in edit mode. Default: <code>true</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>customReplacer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(domNode, data, meta, renderMacroInEditMode) &#8658; ReactElement | DOMNode</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Replaces an HTML parser node. Returning the original node leaves it unchanged.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
+</div>
+<div class="paragraph lead">
+<p>Example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-tsx" data-lang="tsx">&lt;RichTextView
+    data={part.config.body}
+    meta={meta}
+    className="article-body"
+/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="../nextjs/rich-text.ahtml">Rich text</a> for the query and URL-processing requirements.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="fragment"><a class="link" href="#fragment">Fragment</a></h3>
 <div class="paragraph">
-<p>Renders the component tree stored by an XP fragment.</p>
+<p>Renders the component tree stored by an XP fragment. A full-page fragment reads the <code>fragment</code> region from <code>page</code>; an embedded fragment reads <code>component.fragment.components</code>.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>Fragment()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#page-data">PageData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Fragment page used when rendering the fragment as complete content.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>component</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#fragment-data">FragmentData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Embedded fragment component.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="singlecomponent"><a class="link" href="#singlecomponent">SingleComponent</a></h3>
 <div class="paragraph">
-<p>Renders the component requested by Content Studio during an incremental refresh.</p>
+<p>Renders <code>meta.requestedComponent</code> for an incremental Content Studio component refresh. It returns no visible output when the requested component is absent.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>SingleComponent()</code> takes a single <code>props</code> object with the <a href="#fetch-content-result">FetchContentResult</a> properties. It consumes <code>meta</code> and <code>common</code>.</p>
+</div>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="staticcontent"><a class="link" href="#staticcontent">StaticContent</a></h3>
 <div class="paragraph">
-<p>Preserves server-rendered editor HTML during hydration when its <code>condition</code> is true.</p>
+<p>Preserves server-rendered HTML during hydration. When the existing element contains HTML and <code>condition</code> is true, the client keeps that HTML instead of rendering <code>children</code> again.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>StaticContent()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>condition</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Enable preservation of existing server-rendered HTML. The runtime default is <code>true</code>, although the TypeScript property is required.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>children</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ReactNode</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Content rendered on the server, during SPA navigation, or when <code>condition</code> is false.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>element</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Wrapper element name. Default: <code>div</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>additional properties</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Record&lt;string, any&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> HTML properties forwarded to the wrapper element.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>ReactNode</code>.</p>
+</div>
+<div class="paragraph lead">
+<p>Example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-tsx" data-lang="tsx">&lt;StaticContent condition={meta.renderMode === RENDER_MODE.EDIT}&gt;
+    {children}
+&lt;/StaticContent&gt;</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="propsview"><a class="link" href="#propsview">PropsView</a></h3>
 <div class="paragraph">
-<p>Development view that prints page, component, data, and common props.</p>
+<p>Development view that prints JSON representations of known mapping props. Its declaration accepts any props object; these are the properties it displays:</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Page props to display.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>part</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Part props to display.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>layout</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Layout props to display.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed mapping data to display.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Shared data to display.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -586,23 +1369,298 @@ import RichTextView from '@enonic/nextjs-adapter/views/RichTextView';</code></pr
 <div class="paragraph">
 <p>Base mapping for deliberately empty output.</p>
 </div>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="text"><a class="link" href="#text">Text</a></h3>
 <div class="paragraph">
-<p>Base mapping for XP text components.</p>
+<p>Base mapping for XP text components. It delegates the text value to <code>RichTextView</code> and disables mapped macro rendering in edit mode.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>Text()</code> takes a single <code>props</code> object with these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>component</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#text-data">TextData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Text component containing a <code>value: RichTextData</code> property.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Path of the text component in the XP page tree.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="defaultmacro"><a class="link" href="#defaultmacro">DefaultMacro</a></h3>
 <div class="paragraph">
-<p>Fallback renderer imported from <code>@enonic/nextjs-adapter/views/macros/DefaultMacro</code>.</p>
+<p>Fallback macro renderer from <code>views/macros/DefaultMacro</code>. It parses and renders <code>config.body</code> as HTML.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>DefaultMacro()</code> takes a single <code>props</code> object with the <a href="#macro-props">MacroProps</a> properties.</p>
+</div>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>ReactElement</code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="disablemacro"><a class="link" href="#disablemacro">DisableMacro</a></h3>
 <div class="paragraph">
-<p>Renderer for disabled macros, imported from <code>@enonic/nextjs-adapter/views/macros/DisableMacro</code>.</p>
+<p>Renderer from <code>views/macros/DisableMacro</code> for disabled macros. It returns <code>config.body</code> without parsing the body as HTML.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>DisableMacro()</code> takes a single <code>props</code> object with the <a href="#macro-props">MacroProps</a> properties.</p>
+</div>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>any</code>, matching the type of <code>config.body</code> in the adapter declaration.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="missingcomponent"><a class="link" href="#missingcomponent">MissingComponent</a></h3>
+<div class="paragraph">
+<p>Named export from <code>views/BaseComponent</code> that renders a visible diagnostic for an unregistered component.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>descriptor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Missing XP descriptor.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Component kind.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="errorcomponent"><a class="link" href="#errorcomponent">ErrorComponent</a></h3>
+<div class="paragraph">
+<p>Named export from <code>views/BaseComponent</code> that renders a visible component error.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Component kind.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>descriptor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> XP descriptor.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reason</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Error message.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="placeholdercomponent"><a class="link" href="#placeholdercomponent">PlaceholderComponent</a></h3>
+<div class="paragraph">
+<p>Named export from <code>views/BaseComponent</code> that renders a diagnostic when an initialized component produces empty output.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Component kind.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>descriptor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> XP descriptor.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>JSX.Element</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="shouldshowmissingview"><a class="link" href="#shouldshowmissingview">shouldShowMissingView</a></h3>
+<div class="paragraph">
+<p>Returns whether missing-component diagnostics should be visible. They are shown in development and in XP render modes other than <code>next</code>.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>meta</code> (<a href="common.ahtml#meta-data">MetaData</a>) — runtime request and editing context.</p>
+</div>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>boolean</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="shouldshowerrorview"><a class="link" href="#shouldshowerrorview">shouldShowErrorView</a></h3>
+<div class="paragraph">
+<p>Returns whether component errors should be visible. Errors are shown in edit mode.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>meta</code> (<a href="common.ahtml#meta-data">MetaData</a>) — runtime request and editing context.</p>
+</div>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>boolean</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="shouldshowplaceholderview"><a class="link" href="#shouldshowplaceholderview">shouldShowPlaceholderView</a></h3>
+<div class="paragraph">
+<p>Returns whether empty-component placeholders should be visible. Placeholders are shown in edit mode.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<div class="paragraph">
+<p><code>meta</code> (<a href="common.ahtml#meta-data">MetaData</a>) — runtime request and editing context.</p>
+</div>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>boolean</code>.</p>
 </div>
 </div>
 </div>
@@ -611,7 +1669,7 @@ import RichTextView from '@enonic/nextjs-adapter/views/RichTextView';</code></pr
 <h2 id="classes"><a class="link" href="#classes">Classes</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This entry point exports no classes.</p>
+<p>The view entry points export no classes.</p>
 </div>
 </div>
 </div>
@@ -619,49 +1677,708 @@ import RichTextView from '@enonic/nextjs-adapter/views/RichTextView';</code></pr
 <h2 id="view-type-definitions"><a class="link" href="#view-type-definitions">Type Definitions</a></h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="page-component"><a class="link" href="#page-component">PageComponent</a></h3>
+<div class="paragraph">
+<p>One normalized component in the XP page tree. The property matching <code>type</code> contains the kind-specific data.</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>XP_COMPONENT_TYPE</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Component kind: <code>page</code>, <code>layout</code>, <code>part</code>, <code>text</code>, or <code>fragment</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Component path within the page tree.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#page-data">PageData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Present for a page component.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>layout</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#layout-data">LayoutData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Present for a layout component.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>part</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#part-data">PartData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Present for a part component.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>text</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#text-data">TextData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Present for a text component.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fragment</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#fragment-data">FragmentData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Present for a fragment component.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Present for an image component.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#region-tree">RegionTree</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Regions attached to the component.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the component mapping&#8217;s query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Component query or processing error.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>additional properties</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Fields selected by custom component queries.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="page-data"><a class="link" href="#page-data">PageData</a></h3>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>descriptor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Application-qualified XP page descriptor.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>config</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Page configuration.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>template</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code> or <code>null</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Page-template reference.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#region-tree">RegionTree</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Regions owned by the page.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="layout-data"><a class="link" href="#layout-data">LayoutData</a></h3>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>descriptor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Application-qualified XP layout descriptor.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>config</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Layout configuration.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#region-tree">RegionTree</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Normalized regions added before a mapped layout view is called.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>additional properties</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Fields selected by custom layout queries.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="part-data"><a class="link" href="#part-data">PartData</a></h3>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>descriptor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Application-qualified XP part descriptor.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>config</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Part configuration.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>additional properties</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Fields selected by custom part queries.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="fragment-data"><a class="link" href="#fragment-data">FragmentData</a></h3>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Fragment content ID.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fragment</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{components: PageComponent[]}</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Normalized components stored by the fragment.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="text-data"><a class="link" href="#text-data">TextData</a></h3>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#rich-text-data">RichTextData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Processed rich-text value.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="rich-text-data"><a class="link" href="#rich-text-data">RichTextData</a></h3>
+<div class="paragraph">
+<p>Rich-text result provided by <code>@enonic/react-components</code> and re-exported by the adapter.</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>processedHtml</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>HTML containing reference markers for links, images, and macros.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>links</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LinkData[]</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Resolved internal content and media links.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>images</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ImageData[]</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Resolved images and image styles.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>macros</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#macro-data">MacroData</a>`[]`</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Resolved macro descriptors and configurations.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>additional properties</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>unknown</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Additional fields carried by an extended rich-text query.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="macro-data"><a class="link" href="#macro-data">MacroData</a></h3>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ref</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Reference matching the macro marker in <code>processedHtml</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Macro name.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>descriptor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Application-qualified macro descriptor.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>config</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Record&lt;string, Record&lt;string, unknown&gt;&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Macro configuration grouped by sanitized macro name.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="region-tree"><a class="link" href="#region-tree">RegionTree</a></h3>
+<div class="paragraph">
+<p>A record keyed by region name. Each value contains that region&#8217;s <code>name</code> and ordered <code>components: PageComponent[]</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fetch-content-result"><a class="link" href="#fetch-content-result">FetchContentResult</a></h3>
+<div class="paragraph">
+<p>Shared input to <code>MainView</code>, <code>BaseContent</code>, and <code>SingleComponent</code>. It is returned by <code>fetchContent()</code>.</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Record&lt;string, any&gt;</code> or <code>null</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Processed content-type query result.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Record&lt;string, any&gt;</code> or <code>null</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Processed shared-query result.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#page-component">PageComponent</a> or <code>null</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Normalized page component tree.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{code: string, message: string}</code> or <code>null</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Structured fetch failure inherited from <code>Result</code>.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
 <h3 id="page-props"><a class="link" href="#page-props">PageProps</a></h3>
 <div class="paragraph">
-<p>Provides mapped page data, component path, processed <code>data</code>, shared <code>common</code> data, and <code>MetaData</code>.</p>
+<p>Props passed by <code>BasePage</code> to a registered page view.</p>
 </div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#page-data">PageData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Normalized page descriptor, configuration, template, and regions.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Page component path.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the page mapping&#8217;s query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="layout-props"><a class="link" href="#layout-props">LayoutProps</a></h3>
 <div class="paragraph">
-<p>Provides mapped layout data including regions, component path, shared data, and <code>MetaData</code>.</p>
+<p>Props passed by <code>BaseLayout</code> to a registered layout view.</p>
 </div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>layout</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#layout-data">LayoutData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Normalized layout descriptor, configuration, and regions.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Layout component path.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="part-props"><a class="link" href="#part-props">PartProps</a></h3>
 <div class="paragraph">
-<p>Provides mapped part data, component path, processed and shared data, and <code>MetaData</code>.</p>
+<p>Props passed by <code>BasePart</code> to a registered part view.</p>
 </div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>part</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#part-data">PartData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Normalized part descriptor, configuration, and queried fields.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Part component path.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the part mapping&#8217;s query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>common</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>any</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Processed result of the shared query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
-<h3 id="rich-text-view-props"><a class="link" href="#rich-text-view-props">RichTextViewProps</a></h3>
+<h3 id="macro-props"><a class="link" href="#macro-props">MacroProps</a></h3>
 <div class="paragraph">
-<p>Requires processed <code>RichTextData</code> and <code>MetaData</code>; optionally accepts a CSS class, wrapper tag, and custom DOM replacer.</p>
+<p>Props passed by <code>BaseMacro</code> to a registered macro view. <code>DefaultMacro</code> and <code>DisableMacro</code> use the same shape.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="region-props"><a class="link" href="#region-props">RegionProps</a></h3>
-<div class="paragraph">
-<p>Requires a region name and <code>MetaData</code>; optionally accepts components, a CSS class, and shared data.</p>
-</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Macro name from the rich text.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>children</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code> or <code>ReactNode</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Content enclosed by the macro.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>config</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Record&lt;string, any&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Normalized macro configuration.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common.ahtml#meta-data">MetaData</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Runtime request and editing context.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="constants"><a class="link" href="#constants">Constants</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="macro_disable"><a class="link" href="#macro_disable">MACRO_DISABLE</a></h3>
 <div class="paragraph">
-<p>The views entry points export no constants.</p>
+<p><code>system:disable</code> — descriptor used for XP&#8217;s disabled macro.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="macro_embed"><a class="link" href="#macro_embed">MACRO_EMBED</a></h3>
+<div class="paragraph">
+<p><code>system:embed</code> — descriptor used for XP&#8217;s embedded HTML macro.</p>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 10:04:46 UTC
+Last updated 2026-08-06 11:24:29 UTC
 </div>
 </div>
 </body>

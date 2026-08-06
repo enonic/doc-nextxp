@@ -548,14 +548,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The value of <code>ENONIC_API_TOKEN</code> in Next.js must match the secret configured for the selected front end in <code>com.enonic.app.nextxp.cfg</code>. Do not expose it through a <code>NEXT_PUBLIC_</code> variable. Restrict the preview endpoints to HTTPS in production.</p>
 </div>
 <div class="paragraph">
-<p>See <a href="../app/configuration.ahtml">App configuration</a> and <a href="../starter/configuration.ahtml">Starter configuration</a>.</p>
+<p>See <a href="../app/preview.ahtml">Preview proxy</a> for the XP-side implementation, <a href="../app/configuration.ahtml">App configuration</a>, and <a href="../starter/configuration.ahtml">Starter configuration</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 10:04:46 UTC
+Last updated 2026-08-06 11:24:29 UTC
 </div>
 </div>
 </body>
