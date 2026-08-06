@@ -537,7 +537,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><code>MainView</code> renders either the complete content item or one requested component. It uses <code>ComponentRegistry</code> to select views for content types, pages, layouts, and parts. Regions retain the order defined by the XP page structure.</p>
 </div>
 <div class="paragraph">
-<p>In edit mode, adapter views add the DOM attributes Content Studio needs to identify components and regions. These wrappers are omitted from normal visitor rendering.</p>
+<p>In edit mode, the adapter&#8217;s base component and region views add the DOM attributes Content Studio needs to identify components and regions. <code>@enonic/react-components</code> provides equivalent annotation behavior for applications using its component-tree renderers. These wrappers are omitted from normal visitor rendering.</p>
 </div>
 <div class="paragraph">
 <p>See <a href="components.ahtml">Components and views</a> for mappings and <a href="../adapter/server.ahtml">Server API</a> for <code>fetchContent()</code>.</p>
@@ -547,7 +547,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 09:27:52 UTC
+Last updated 2026-08-06 10:04:46 UTC
 </div>
 </div>
 </body>

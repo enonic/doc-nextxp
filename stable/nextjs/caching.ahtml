@@ -476,7 +476,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="on_demand_revalidation"><a class="link" href="#on_demand_revalidation">On-demand revalidation</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Next.XP app subscribes to XP repository and content events. When published content changes, it calls the starter&#8217;s <code>/api/revalidate</code> endpoint with the shared token.</p>
+<p>The Next.XP app subscribes to XP repository and content events. When published content changes, it calls the configured front end&#8217;s <code>/api/revalidate</code> endpoint with the shared token.</p>
 </div>
 <div class="paragraph">
 <p>The endpoint uses <code>revalidatePath()</code>:</p>
@@ -521,7 +521,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 09:27:52 UTC
+Last updated 2026-08-06 10:04:46 UTC
 </div>
 </div>
 </body>

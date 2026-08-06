@@ -532,7 +532,7 @@ Looking for a guided introduction? Follow the <a href="https://developer.enonic.
 <h2 id="components"><a class="link" href="#components">Components</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The product consists of three components that are released together by major version:</p>
+<p>Next.XP uses three release-aligned components and a shared React rendering library:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -554,6 +554,11 @@ Looking for a guided introduction? Follow the <a href="https://developer.enonic.
 <td class="tableblock halign-left valign-top"><p class="tableblock">Library used by the Next.js front-end: fetches content via the Guillotine GraphQL API, maps Enonic components to React views, processes rich text, and handles preview and localization.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@enonic/react-components</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.npmjs.com/package/@enonic/react-components">npm</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Framework-neutral React components for rendering XP page structures and rich text. It can also emit the component and region annotations Content Studio needs when its page renderers are used. Next.XP installs it through the adapter and uses its rich-text renderer and related types directly.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>starter-nextjs</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/enonic/starter-nextjs">GitHub</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Next.js starter template representing canonical adapter usage — the recommended starting point for new projects.</p></td>
@@ -567,6 +572,9 @@ Looking for a guided introduction? Follow the <a href="https://developer.enonic.
 </table>
 <div class="paragraph">
 <p>Most front-end development happens in a project created from <code>starter-nextjs</code>. That project depends on <code>@enonic/nextjs-adapter</code>, while the corresponding Next.XP app runs in the Enonic XP installation.</p>
+</div>
+<div class="paragraph">
+<p><code>@enonic/react-components</code> follows its own release cycle and is not a Next.XP version driver. Applications normally receive the compatible version transitively from the adapter.</p>
 </div>
 </div>
 </div>
@@ -654,7 +662,7 @@ Looking for a guided introduction? Follow the <a href="https://developer.enonic.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 09:27:52 UTC
+Last updated 2026-08-06 10:04:46 UTC
 </div>
 </div>
 </body>

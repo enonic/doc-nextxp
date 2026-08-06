@@ -451,7 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Rich text from XP contains structured information for internal links, images, and macros in addition to HTML. <code>RichTextView</code> renders that information as React elements while preserving Content Studio editing behavior.</p>
+<p>Rich text from XP contains structured information for internal links, images, and macros in addition to HTML. The adapter&#8217;s <code>RichTextView</code> adapts Next.XP metadata and URL handling, then delegates the underlying React rendering to <code>@enonic/react-components</code>.</p>
 </div>
 </div>
 </div>
@@ -471,7 +471,7 @@ export function Article({data, meta}) {
 </div>
 </div>
 <div class="paragraph">
-<p>The view uses Next.js links for internal content, renders referenced images, and delegates registered macros through the component registry. A custom replacer may override individual DOM nodes.</p>
+<p>The view supplies <code>@enonic/react-components</code> with Next.js-aware link, image, and macro adapters. The supporting library parses the processed HTML and resolves its structured references. A custom replacer may override individual DOM nodes.</p>
 </div>
 </div>
 </div>
@@ -519,7 +519,7 @@ export function Article({data, meta}) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 09:27:52 UTC
+Last updated 2026-08-06 10:04:46 UTC
 </div>
 </div>
 </body>

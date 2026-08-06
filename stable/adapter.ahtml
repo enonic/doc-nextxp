@@ -454,6 +454,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p><code>@enonic/nextjs-adapter</code> is the front-end library at the center of Next.XP. It queries Guillotine, builds renderable page structures, maps XP descriptors to React views, processes URLs and rich text, and supplies Content Studio editing metadata.</p>
 </div>
+<div class="paragraph">
+<p>The adapter depends on <code>@enonic/react-components</code>, which provides reusable XP-aware React components and types. Adapter 5 uses its <code>RichText</code> renderer for links, images, and macros, while the adapter&#8217;s own views handle the standard Next.XP page tree and its editing annotations.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -554,7 +557,7 @@ export default async function Page({params}) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 09:27:52 UTC
+Last updated 2026-08-06 10:04:46 UTC
 </div>
 </div>
 </body>

@@ -443,6 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#preview_handshake">Preview handshake</a></li>
 <li><a href="#render_modes">Render modes</a></li>
+<li><a href="#editing_annotations">Editing annotations</a></li>
 <li><a href="#component_refresh">Component refresh</a></li>
 <li><a href="#security">Security</a></li>
 </ul>
@@ -519,6 +520,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
+<h2 id="editing_annotations"><a class="link" href="#editing_annotations">Editing annotations</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Content Studio recognizes rendered page structures through <code>data-portal-component-type</code> and <code>data-portal-region</code> attributes. Adapter 5 adds these attributes through its base component and region views when the render mode is <code>edit</code>.</p>
+</div>
+<div class="paragraph">
+<p>The supporting <code>@enonic/react-components</code> package also implements these annotations in its generic component wrapper and region renderers. Next.XP currently uses that package directly for rich-text rendering, while the adapter supplies the page-tree annotations in the standard integration.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="component_refresh"><a class="link" href="#component_refresh">Component refresh</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -543,7 +555,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 09:27:52 UTC
+Last updated 2026-08-06 10:04:46 UTC
 </div>
 </div>
 </body>

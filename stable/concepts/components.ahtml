@@ -453,6 +453,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>An XP page is composed from page, layout, part, text, image, and fragment components. Next.XP maps their XP descriptors to queries, processors, and React views through <code>ComponentRegistry</code>.</p>
 </div>
+<div class="paragraph">
+<p>The adapter builds on <code>@enonic/react-components</code>, a shared library for rendering XP component trees and rich text in React applications. That library provides its own component registry, base views, regions, rich-text renderer, and Content Studio annotations. Adapter 5 uses its rich-text renderer and types directly; the adapter&#8217;s own base views and registry provide the page-tree integration described on this page.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -519,7 +522,7 @@ ComponentRegistry.addPart('com.example.app:hero', {
 <p>Page and component views receive their descriptor data, component path, runtime <code>meta</code>, shared <code>common</code> data, and processed <code>data</code> when a query is registered. Layout views also receive their regions.</p>
 </div>
 <div class="paragraph">
-<p>Render regions with the adapter&#8217;s <code>Region</code> views. They preserve component ordering and add editing attributes in Content Studio.</p>
+<p>Render regions with the adapter&#8217;s <code>Region</code> views. They preserve component ordering and add editing attributes in Content Studio. Applications using the component-tree renderers from <code>@enonic/react-components</code> receive equivalent region and component annotations from that library.</p>
 </div>
 </div>
 </div>
@@ -540,7 +543,7 @@ ComponentRegistry.addPart('com.example.app:hero', {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 09:27:52 UTC
+Last updated 2026-08-06 10:04:46 UTC
 </div>
 </div>
 </body>

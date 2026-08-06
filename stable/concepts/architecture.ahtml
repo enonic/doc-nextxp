@@ -521,6 +521,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">Selects projects, queries Guillotine, builds the page tree, maps XP descriptors to React views, and adapts URLs and editing metadata.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@enonic/react-components</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Supplies reusable React renderers and types for XP page structures and rich text, including edit-mode component and region annotations. Adapter 5 uses its rich-text layer directly while retaining its own page-tree wrappers.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>starter-nextjs</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Shows the canonical Next.js routes, component registry, localization, preview endpoints, and revalidation endpoint.</p></td>
 </tr>
@@ -554,7 +558,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 09:27:52 UTC
+Last updated 2026-08-06 10:04:46 UTC
 </div>
 </div>
 </body>
