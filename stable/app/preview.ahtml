@@ -467,7 +467,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Content Studio requests a site that has the Next.XP app configured.</p>
+<p>Content Studio requests preview of a site that has the Next.XP app configured.</p>
 </li>
 <li>
 <p>The app selects the site&#8217;s named front-end configuration and shared secret.</p>
@@ -590,7 +590,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

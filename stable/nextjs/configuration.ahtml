@@ -489,7 +489,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ENONIC_API_TOKEN</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">For preview and revalidation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes, for preview and revalidation</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Shared secret used by the starter&#8217;s protected API routes. It must match the Next.XP app configuration.</p></td>
 </tr>
 <tr>
@@ -546,7 +546,7 @@ NEXT_PUBLIC_ENONIC_MAPPINGS=$ENONIC_MAPPINGS</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

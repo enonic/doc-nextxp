@@ -512,7 +512,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><code>src/proxy.ts</code> resolves locale information before the route runs. If the URL already begins with a configured locale, it continues unchanged. Otherwise it rewrites the request to the default locale route.</p>
 </div>
 <div class="paragraph">
-<p>Exclude API routes, Next.js assets, and everything under <code>public/</code> from the proxy matcher. Add new public directories to the matcher exclusion when the project structure changes.</p>
+<p>Excluded are API routes, Next.js assets, and everything under <code>public/</code> from the proxy matcher. Remember to add new public directories to the matcher exclusion when the project structure changes.</p>
 </div>
 </div>
 </div>
@@ -549,7 +549,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

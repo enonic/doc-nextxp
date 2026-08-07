@@ -459,7 +459,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="mapping_format"><a class="link" href="#mapping_format">Mapping format</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Set <code>ENONIC_MAPPINGS</code> to a comma-separated list:</p>
+<p>Set <code>ENONIC_MAPPINGS</code> env var to a comma-separated list:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -491,7 +491,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>/site</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Site root added when resolving content in XP and removed from public URLs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Site root path added when resolving content in XP and removed from public URLs.</p></td>
 </tr>
 </tbody>
 </table>
@@ -505,6 +505,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="paragraph">
 <p>The starter&#8217;s <code>src/proxy.ts</code> rewrites URLs without a locale segment to the resolved locale route. Public content paths remain site-relative: an XP path such as <code>/site/about</code> is presented as <code>/en/about</code> when <code>en</code> is the active locale.</p>
+</div>
+<div class="paragraph">
+<p>Default locale (first one in the <code>ENONIC_MAPPINGS</code> list) is not explicitly required in the URL. For example, <code>/en/about</code> and <code>/about</code> both resolve to the same content when <code>en</code> is default.</p>
 </div>
 </div>
 </div>
@@ -535,7 +538,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

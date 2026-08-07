@@ -460,7 +460,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="time_based_revalidation"><a class="link" href="#time_based_revalidation">Time-based revalidation</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Export a <code>revalidate</code> interval from the catch-all page when content may be cached for a fixed period:</p>
+<p>Export a <code>revalidate</code> interval from the catch-all route when content may be cached for a fixed period:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -511,10 +511,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="static_generation"><a class="link" href="#static_generation">Static generation</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Use <code>fetchContentPathsForAllLocales()</code> with <code>generateStaticParams()</code> when the set of content paths is suitable for pre-rendering. Limit or replace its query for large sites. Static generation and on-demand revalidation may be combined.</p>
+<p>Use <code>fetchContentPathsForAllLocales()</code> with <code>generateStaticParams()</code> when the set of content paths is suitable for pre-rendering. Limit or replace its query for large sites. Static generation requires on-demand revalidation to keep static pages up to date when changes occur.</p>
 </div>
 <div class="paragraph">
-<p>The token configured in <code>ENONIC_API_TOKEN</code> must remain server-side because it authorizes cache invalidation.</p>
+<p>The token configured in <code>ENONIC_API_TOKEN</code> env var must always remain server-side because it authorizes cache invalidation and should not be propagated to the client-side.</p>
 </div>
 <div class="paragraph">
 <p>See <a href="../app/revalidation.ahtml">Revalidation</a> for the XP-side event handling and delivery flow.</p>
@@ -524,7 +524,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

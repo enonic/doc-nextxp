@@ -465,9 +465,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#missingcomponent">MissingComponent</a></li>
 <li><a href="#errorcomponent">ErrorComponent</a></li>
 <li><a href="#placeholdercomponent">PlaceholderComponent</a></li>
-<li><a href="#shouldshowmissingview">shouldShowMissingView</a></li>
-<li><a href="#shouldshowerrorview">shouldShowErrorView</a></li>
-<li><a href="#shouldshowplaceholderview">shouldShowPlaceholderView</a></li>
 </ul>
 </li>
 <li><a href="#classes">Classes</a></li>
@@ -1609,60 +1606,6 @@ return &lt;MainView {...result}/&gt;;</code></pre>
 <p><code>JSX.Element</code>.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="shouldshowmissingview"><a class="link" href="#shouldshowmissingview">shouldShowMissingView</a></h3>
-<div class="paragraph">
-<p>Returns whether missing-component diagnostics should be visible. They are shown in development and in XP render modes other than <code>next</code>.</p>
-</div>
-<div class="paragraph lead">
-<p>Parameters</p>
-</div>
-<div class="paragraph">
-<p><code>meta</code> (<a href="common.ahtml#meta-data">MetaData</a>) — runtime request and editing context.</p>
-</div>
-<div class="paragraph lead">
-<p>Returns</p>
-</div>
-<div class="paragraph">
-<p><code>boolean</code>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="shouldshowerrorview"><a class="link" href="#shouldshowerrorview">shouldShowErrorView</a></h3>
-<div class="paragraph">
-<p>Returns whether component errors should be visible. Errors are shown in edit mode.</p>
-</div>
-<div class="paragraph lead">
-<p>Parameters</p>
-</div>
-<div class="paragraph">
-<p><code>meta</code> (<a href="common.ahtml#meta-data">MetaData</a>) — runtime request and editing context.</p>
-</div>
-<div class="paragraph lead">
-<p>Returns</p>
-</div>
-<div class="paragraph">
-<p><code>boolean</code>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="shouldshowplaceholderview"><a class="link" href="#shouldshowplaceholderview">shouldShowPlaceholderView</a></h3>
-<div class="paragraph">
-<p>Returns whether empty-component placeholders should be visible. Placeholders are shown in edit mode.</p>
-</div>
-<div class="paragraph lead">
-<p>Parameters</p>
-</div>
-<div class="paragraph">
-<p><code>meta</code> (<a href="common.ahtml#meta-data">MetaData</a>) — runtime request and editing context.</p>
-</div>
-<div class="paragraph lead">
-<p>Returns</p>
-</div>
-<div class="paragraph">
-<p><code>boolean</code>.</p>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -2378,7 +2321,7 @@ return &lt;MainView {...result}/&gt;;</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

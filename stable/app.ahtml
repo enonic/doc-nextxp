@@ -481,7 +481,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Define at least one front-end URL and shared secret as described in <a href="app/configuration.ahtml">Configuration</a>.</p>
 </li>
 <li>
-<p>Select that front-end configuration in the site&#8217;s Next.XP form, then save the site.</p>
+<p>Select that front-end configuration in the site&#8217;s Next.XP config form, then save the site.</p>
 </li>
 <li>
 <p>Open the site in Content Studio and verify that preview loads the Next.js front end.</p>
@@ -546,7 +546,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

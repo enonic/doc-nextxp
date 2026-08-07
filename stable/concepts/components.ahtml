@@ -451,10 +451,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>An XP page is composed from page, layout, part, text, image, and fragment components. Next.XP maps their XP descriptors to queries, processors, and React views through <code>ComponentRegistry</code>.</p>
+<p>An XP page is composed of <code>page</code>, <code>layout</code>, <code>part</code>, <code>text</code>, and <code>fragment</code> components. Next.XP maps their XP descriptors to queries, processors, and React views through <code>ComponentRegistry</code>.</p>
 </div>
 <div class="paragraph">
-<p>The adapter builds on <code>@enonic/react-components</code>, a shared library for rendering XP component trees and rich text in React applications. That library provides its own component registry, base views, regions, rich-text renderer, and Content Studio annotations. Adapter 5 uses its rich-text renderer and types directly; the adapter&#8217;s own base views and registry provide the page-tree integration described on this page.</p>
+<p>The adapter builds on <code>@enonic/react-components</code>, a shared library for rendering XP component trees and rich text in React applications. That library provides base views, regions and rich-text renderer. Adapter 5 uses its rich-text renderer and types directly; the adapter&#8217;s own base views and registry provide the page-tree integration described on this page.</p>
 </div>
 </div>
 </div>
@@ -498,11 +498,11 @@ ComponentRegistry.addPart('com.example.app:hero', {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>configQuery</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Additional selection for component configuration.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Additional selection for component configuration. Can only contain fields from the component&#8217;s <code>config</code> object. Result is merged into the component&#8217;s <code>data.config</code> property.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>processor</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Asynchronous transformation applied before props reach the view. Return an object or <code>null</code>, never <code>undefined</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Asynchronous transformation applied on the query result before props reach the view. Return an <code>object</code> or <code>null</code>, never <code>undefined</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>view</code></p></td>
@@ -511,7 +511,7 @@ ComponentRegistry.addPart('com.example.app:hero', {
 </tbody>
 </table>
 <div class="paragraph">
-<p>Content types, pages, layouts, parts, macros, and generic component kinds have separate registration methods.</p>
+<p>Content types, pages, layouts, parts, macros, and generic component kinds have separate registration methods, but all mappings share the same query, processor, and view properties. See <a href="../adapter/common.ahtml#component-definition-params">Adapter type definitions</a> for more details.</p>
 </div>
 </div>
 </div>
@@ -522,7 +522,7 @@ ComponentRegistry.addPart('com.example.app:hero', {
 <p>Page and component views receive their descriptor data, component path, runtime <code>meta</code>, shared <code>common</code> data, and processed <code>data</code> when a query is registered. Layout views also receive their regions.</p>
 </div>
 <div class="paragraph">
-<p>Render regions with the adapter&#8217;s <code>Region</code> views. They preserve component ordering and add editing attributes in Content Studio. Applications using the component-tree renderers from <code>@enonic/react-components</code> receive equivalent region and component annotations from that library.</p>
+<p>Render regions with the adapter&#8217;s <code>Region</code> view. They preserve component ordering and add editing attributes in Content Studio. Applications using the component-tree renderers from <code>@enonic/react-components</code> receive equivalent region and component annotations from that library.</p>
 </div>
 </div>
 </div>
@@ -543,7 +543,7 @@ ComponentRegistry.addPart('com.example.app:hero', {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

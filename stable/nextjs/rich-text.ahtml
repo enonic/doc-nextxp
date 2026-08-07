@@ -500,8 +500,17 @@ export function Article({data, meta}) {
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Enonic XP 8 media references use <code>/_/media:image/</code> and <code>/_/media:attachment/</code>. Adapter 5 recognizes these formats.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Enonic XP 8 media references use <code>/_/media:image/</code> and <code>/_/media:attachment/</code>. Adapter 5 recognizes these formats.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -519,7 +528,7 @@ export function Article({data, meta}) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

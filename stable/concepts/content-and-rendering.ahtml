@@ -473,18 +473,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Select registered queries for the content type and component descriptors.</p>
 </li>
 <li>
-<p>Combine those selections into a Guillotine data query.</p>
+<p>Combine all of those selections into a single Guillotine data query.</p>
 </li>
 <li>
-<p>Run registered processors and attach their results to the page tree.</p>
+<p>Run registered processors on the retrieved data and attach their results to the page tree.</p>
 </li>
 <li>
 <p>Return a <code>FetchContentResult</code> for rendering.</p>
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p>The metadata request allows the adapter to request only the data required by the mapped content and components.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The metadata request allows the adapter to request only the data required by the mapped content and components.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -525,8 +534,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p>Call <code>validateData()</code> before rendering. It converts missing-content and shortcut results into the corresponding Next.js navigation behavior.</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Call <code>validateData()</code> before rendering. It converts missing-content and shortcut results into the corresponding Next.js navigation behavior.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -547,7 +565,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

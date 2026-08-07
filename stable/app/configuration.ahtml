@@ -490,7 +490,19 @@ nextjs.production.secret=replace-this-production-secret</code></pre>
 </tbody>
 </table>
 <div class="paragraph">
-<p>Names are case-insensitive in the configuration parser and appear in the site&#8217;s <strong>Configuration name</strong> selector. Use <code>default</code> as the fallback and named entries when sites or environments use different front ends.</p>
+<p>Names are case-insensitive in the configuration parser and appear in the site&#8217;s <strong>Configuration name</strong> selector.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Use <code>default</code> name to override the default values.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -525,7 +537,7 @@ nextjs.default.secret=mySecretKey</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

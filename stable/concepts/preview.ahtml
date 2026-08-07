@@ -464,7 +464,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Content Studio requests a site that has the Next.XP app configured.</p>
+<p>Content Studio requests preview of a site that has the Next.XP app configured.</p>
 </li>
 <li>
 <p>The app selects a named front-end URL and shared secret.</p>
@@ -480,8 +480,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p>The app caches the resulting Next.js preview cookie and reuses it for later preview and component requests.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The app caches the resulting Next.js preview cookie and reuses it for later preview and component requests.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -524,7 +533,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>preview</code> or <code>inline</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Content Studio preview contexts. Uses draft content without normal public routing assumptions.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content Studio preview contexts. Uses draft content in Next.js draft mode.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>live</code></p></td>
@@ -538,7 +547,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="editing_annotations"><a class="link" href="#editing_annotations">Editing annotations</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Content Studio recognizes rendered page structures through <code>data-portal-component-type</code> and <code>data-portal-region</code> attributes. Adapter 5 adds these attributes through its base component and region views when the render mode is <code>edit</code>.</p>
+<p>Content Studio recognizes rendered page structures through <code>data-portal-component-type</code> and <code>data-portal-region</code> attributes. Adapter adds these attributes through its base component and region views when the render mode is <code>edit</code>.</p>
 </div>
 <div class="paragraph">
 <p>The supporting <code>@enonic/react-components</code> package also implements these annotations in its generic component wrapper and region renderers. Next.XP currently uses that package directly for rich-text rendering, while the adapter supplies the page-tree annotations in the standard integration.</p>
@@ -560,7 +569,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="security"><a class="link" href="#security">Security</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The value of <code>ENONIC_API_TOKEN</code> in Next.js must match the secret configured for the selected front end in <code>com.enonic.app.nextxp.cfg</code>. Do not expose it through a <code>NEXT_PUBLIC_</code> variable. Restrict the preview endpoints to HTTPS in production.</p>
+<p>The value of <code>ENONIC_API_TOKEN</code> env var in Next.js must match the secret configured for the selected front end in <code>com.enonic.app.nextxp.cfg</code> Enonic XP config file. Do not expose it through a <code>NEXT_PUBLIC_</code> variable. Restrict the preview endpoints to HTTPS in production.</p>
 </div>
 <div class="paragraph">
 <p>See <a href="../app/preview.ahtml">Preview proxy</a> for the XP-side implementation, <a href="../app/configuration.ahtml">App configuration</a>, and <a href="../starter/configuration.ahtml">Starter configuration</a>.</p>
@@ -570,7 +579,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>

@@ -474,7 +474,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="paths_and_projects"><a class="link" href="#paths_and_projects">Paths and projects</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Normal publish events invalidate the affected content path. Move and rename events also retain the previous path, allowing both the old and new public routes to be invalidated.</p>
+<p>Normal publish events invalidates the affected site. Move and rename events also retain the previous path, allowing both the old and new public routes to be invalidated.</p>
 </div>
 <div class="paragraph">
 <p>The active XP project is sent in the <code>Content-Studio-Project</code> header. The front end uses it to resolve the correct locale and project mapping before invalidating paths.</p>
@@ -488,7 +488,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The app calls the protected <code>/api/revalidate</code> route on the selected Next.js front end. The starter provides the canonical route handler; a custom front end must implement the same integration contract.</p>
 </div>
 <div class="paragraph">
-<p>The handler validates the shared token and applies Next.js path revalidation to the affected routes. The front end remains responsible for its caching policy and for any additional tags or application-specific caches.</p>
+<p>The handler validates the shared token and applies Next.js path revalidation to the affected routes or the entire site, depending on the presence of the <code>path</code> parameter. The front end remains responsible for its caching policy and for any additional tags or application-specific caches.</p>
 </div>
 <div class="paragraph">
 <p>See <a href="../nextjs/caching.ahtml">Caching and revalidation</a> for the corresponding Next.js behavior.</p>
@@ -499,7 +499,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="configuration_and_security"><a class="link" href="#configuration_and_security">Configuration and security</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The destination URL and token come from the site&#8217;s selected entry in <code>com.enonic.app.nextxp.cfg</code>. The token must match <code>ENONIC_API_TOKEN</code> in the front-end deployment, and <code>/api/revalidate</code> must reject requests with an invalid token.</p>
+<p>The destination URL and token come from the site&#8217;s selected entry in <code>com.enonic.app.nextxp.cfg</code>. The token must match <code>ENONIC_API_TOKEN</code> env var in the front-end deployment, and <code>/api/revalidate</code> must reject requests with an invalid token.</p>
 </div>
 <div class="paragraph">
 <p>XP must be able to reach the configured URL from the cluster master. Use HTTPS outside a trusted local network and use a unique secret for every shared or production environment.</p>
@@ -512,7 +512,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-06 11:52:32 UTC
+Last updated 2026-08-07 14:00:31 UTC
 </div>
 </div>
 </body>
