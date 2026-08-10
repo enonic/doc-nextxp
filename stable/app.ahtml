@@ -458,6 +458,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>The Next.XP app is the Enonic XP companion to a Next.js front end. Install it from <a href="https://market.enonic.com/vendors/enonic/next.xp">Enonic Market</a> and add it to each XP site rendered through Next.XP.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This page documents Next.XP app 4, released with Next.XP 5. The app versions independently of <code>@enonic/nextjs-adapter</code>, so its major does not match the product version.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>The app connects Content Studio to the external front end. It makes the Next.js site available to editors for authenticated preview and notifies the front end when published content must be revalidated. Public visitors still access Next.js directly.</p>
 </div>
@@ -546,7 +558,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-07 14:00:31 UTC
+Last updated 2026-08-10 11:47:50 UTC
 </div>
 </div>
 </body>

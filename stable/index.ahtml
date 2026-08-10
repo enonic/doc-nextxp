@@ -536,35 +536,41 @@ Looking for a guided introduction? Follow our <a href="https://developer.enonic.
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 50.0002%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Version</th>
 <th class="tableblock halign-left valign-top">Distribution</th>
 <th class="tableblock halign-left valign-top">Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@enonic/nextjs-adapter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="adapter.ahtml"><code>@enonic/nextjs-adapter</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.npmjs.com/package/@enonic/nextjs-adapter">npm</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Library used by the Next.js front-end: fetches content via the Guillotine GraphQL API, maps Enonic components to React views, processes rich text, and handles preview and localization.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>@enonic/react-components</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Own release cycle</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.npmjs.com/package/@enonic/react-components">npm</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Framework-neutral React components for rendering XP page structures and rich text. It can also emit the component and region annotations Content Studio needs when its page renderers are used. Next.XP installs it through the adapter and uses its rich-text renderer and related types directly.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>starter-nextjs</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="starter.ahtml"><code>starter-nextjs</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/enonic/starter-nextjs">GitHub</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Next.js starter template representing canonical adapter usage — the recommended starting point for new projects.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Next.XP app</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="app.ahtml">Next.XP app</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://market.enonic.com/vendors/enonic/next.xp">Enonic Market</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">XP application for authenticated front-end preview in Content Studio and revalidation of published content.</p></td>
 </tr>
@@ -612,47 +618,13 @@ Looking for a guided introduction? Follow our <a href="https://developer.enonic.
 <h2 id="versioning"><a class="link" href="#versioning">Versioning</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Next.XP product version follows the major version of <code>@enonic/nextjs-adapter</code>. The adapter is the version driver, and the starter and Next.XP app follow the same major. Patch versions may differ between components within a major and do not need to match exactly.</p>
+<p>The Next.XP product version follows the major version of <code>@enonic/nextjs-adapter</code>. The adapter is the version driver and the starter is released alongside it, while the Next.XP app and <code>@enonic/react-components</code> version independently. The versions this documentation covers are listed in the component table above, and each component page repeats the version it documents.</p>
 </div>
 <div class="paragraph">
-<p>Next.XP 5 is based on:</p>
+<p>Next.XP 5 targets Next.js 16 and React 19, and requires Node.js 24.15.0+ and npm 10.9.2+.</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 66.6666%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Component</th>
-<th class="tableblock halign-left valign-top">Version</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enonic XP</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Guillotine</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@enonic/nextjs-adapter</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Next.js</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">16</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">React</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">19</p></td>
-</tr>
-</tbody>
-</table>
 <div class="paragraph">
-<p>The adapter requires Node.js 24.15.0+ and npm 10.9.2+.</p>
+<p>On the Enonic side it requires Enonic XP 8 with Guillotine installed and configured for every project the front end queries. Both belong to the XP installation rather than to the Next.js application&#8217;s dependencies.</p>
 </div>
 <div class="paragraph">
 <p>See the <a href="release.ahtml">release notes</a> for what changed in each version, and the <a href="upgrade.ahtml">upgrade notes</a> when moving between majors.</p>
@@ -662,7 +634,7 @@ Looking for a guided introduction? Follow our <a href="https://developer.enonic.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-07 14:00:31 UTC
+Last updated 2026-08-10 11:47:50 UTC
 </div>
 </div>
 </body>

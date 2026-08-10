@@ -457,8 +457,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p><a href="https://github.com/enonic/starter-nextjs"><code>starter-nextjs</code></a> is the canonical starting point for an Enonic-backed Next.js application. It is a normal Next.js App Router project with the adapter wiring required for content rendering, localization, Content Studio preview, and revalidation.</p>
 </div>
-<div class="paragraph">
-<p>The Next.XP 5 starter targets Next.js 16, React 19, and <code>@enonic/nextjs-adapter</code> 5. These are product majors; individual dependency patch versions may change as the starter is maintained.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This page documents the starter as released for Next.XP 5, targeting Next.js 16, React 19, and <code>@enonic/nextjs-adapter</code> 5. These are majors; individual dependency patch versions may change as the starter is maintained.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The starter is intentionally small. Copy it when beginning a project, or use it as a reference when integrating Next.XP into an existing Next.js application.</p>
@@ -649,7 +658,7 @@ Follow the <a href="https://developer.enonic.com/learn/next.xp">Next.XP tutorial
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-07 14:00:31 UTC
+Last updated 2026-08-10 11:47:50 UTC
 </div>
 </div>
 </body>
