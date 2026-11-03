@@ -546,7 +546,7 @@ ${pageUrlQuery()}
 </div>
 </li>
 <li>
-<p><strong>Proxy</strong>: Replace <code>src/proxy.ts</code> with the starter&#8217;s version. It validates the <code>xp</code> parameter, enables draft mode through <code>/api/preview</code>, rewrites prefix-less URLs to the internal default-locale route, and redirects <code>/&lt;default locale&gt;/&#8230;&#8203;</code> to <code>/&#8230;&#8203;</code>. Public default-locale URLs lose their prefix.</p>
+<p><strong>Proxy</strong>: Replace <code>src/proxy.ts</code> with the starter&#8217;s version. It validates the <code>xp</code> parameter, enables draft mode through <code>/api/preview</code>, rewrites prefix-less URLs to the internal default-locale route, and redirects <code>/&lt;default locale&gt;/&#8230;&#8203;</code> to <code>/&#8230;&#8203;</code>. URLs without the default-locale prefix were already supported in v5; redirecting explicitly prefixed URLs is new in v6. For example, with <code>en</code> as the default, <code>/about</code> continues to work and <code>/en/about</code> now redirects to <code>/about</code>.</p>
 </li>
 <li>
 <p><strong>Encrypted API routes</strong>: Replace the token check with blob validation in <code>/api/preview</code> and <code>/api/revalidate</code>, and copy <code>src/utils.ts</code> from the starter:</p>
@@ -607,7 +607,7 @@ import {validateBlob} from '../../../utils';</code></pre>
 </div>
 </li>
 <li>
-<p><strong>XP configuration</strong>: Remove any <code>contentSecurityPolicy.header</code> entries added for Next.XP to <code>com.enonic.app.contentstudio.cfg</code>. The Next.XP app now allows its configured origins automatically, but only explicitly configured URLs in production mode. <code>com.enonic.app.nextxp.cfg</code> keeps the same property format. Adding the app to sites is now optional for preview, and still required for revalidation.</p>
+<p><strong>XP configuration</strong>: Remove any <code>contentSecurityPolicy.header</code> entries added for Next.XP to <code>com.enonic.app.contentstudio.cfg</code>. The Next.XP app now allows its configured origins automatically, but only explicitly configured URLs in production mode. <code>com.enonic.app.nextxp.cfg</code> keeps the same property format. Site setup is unchanged: the Next.XP app must be added to the XP site with its front-end configuration selected.</p>
 </li>
 </ol>
 </div>
@@ -845,7 +845,7 @@ If you have custom proxy, you need to update it to support new i18n config.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-03 10:06:59 UTC
+Last updated 2026-11-03 10:32:45 UTC
 </div>
 </div>
 </body>

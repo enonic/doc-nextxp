@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>Preview widget</title>
+<title>Preview live view extension</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,7 +437,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Preview widget</h1>
+<h1>Preview live view extension</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -455,10 +455,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Next.XP app provides the XP side of Content Studio preview. Its "Next.js Preview" widget resolves each content item to a Next.js URL, and Content Studio loads that URL directly from the Next.js front end.</p>
+<p>The Next.XP app implements a custom Next.js preview in Content Studio through its "Next.js Preview" live view extension. The extension resolves each content item to a Next.js URL, and Content Studio loads that URL directly from the Next.js front end.</p>
 </div>
 <div class="paragraph">
-<p>Public visitors do not use this widget. They access the Next.js deployment directly, allowing its normal hosting and caching behavior to remain in control.</p>
+<p>Public visitors access the Next.js deployment directly, allowing its normal hosting and caching behavior to remain in control.</p>
 </div>
 </div>
 </div>
@@ -531,7 +531,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tbody>
 </table>
 <div class="paragraph">
-<p>The starter returns a single catch-all rule and prefixes its target with the project&#8217;s locale, unless it is the default locale, using <code>localizeMappings()</code>. It answers <code>404</code> when the project in the blob is not listed in <code>ENONIC_MAPPINGS</code>; the widget then finds no mapping.</p>
+<p>The starter returns a single catch-all rule and prefixes its target with the project&#8217;s locale, unless it is the default locale, using <code>localizeMappings()</code>. It answers <code>404</code> when the project in the blob is not listed in <code>ENONIC_MAPPINGS</code>; the live view extension then finds no mapping.</p>
 </div>
 <div class="paragraph">
 <p>The app caches the rules per project, for up to 24 hours. A failed request is not cached.</p>
@@ -542,7 +542,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="content_security_policy"><a class="link" href="#content_security_policy">Content Security Policy</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Content Studio ships with a strict Content Security Policy that would block frames from third-party origins. The app extends it with <code>'self'</code> and the origin of every URL in <code>com.enonic.app.nextxp.cfg</code>, in the <code>frame-src</code>, <code>connect-src</code>, and <code>style-src</code> directives. No <code>contentSecurityPolicy.header</code> configuration of Content Studio is needed.</p>
+<p>Content Studio&#8217;s Content Security Policy must allow the Next.js origin to load the preview. The app uses XP 8.1&#8217;s CSP API through an <a href="https://developer.enonic.com/docs/code/stable/web/extensions/processors">extension response processor</a> to add the origin of every URL in <code>com.enonic.app.nextxp.cfg</code> to the <code>frame-src</code>, <code>connect-src</code>, and <code>style-src</code> directives. These contributions extend the existing policy; no manual <code>contentSecurityPolicy.header</code> configuration for Next.XP is needed.</p>
 </div>
 <div class="paragraph">
 <p>When no URL is configured, the default <code><a href="http://localhost:3000" class="bare">http://localhost:3000</a></code> origin is added only when XP runs in dev mode.</p>
@@ -612,7 +612,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-03 10:06:59 UTC
+Last updated 2026-11-03 10:32:45 UTC
 </div>
 </div>
 </body>
