@@ -451,7 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The adapter reads its connection and mapping settings from Next.js environment variables. Keep environment-specific values outside committed files when they contain secrets.</p>
+<p>The adapter reads its connection and mapping settings from Next.js environment variables. Use <code>.env</code> for committed defaults and <code>.env.local</code> or deployment secrets for non-publishable values. See <a href="../starter/configuration.ahtml#environment">Starter environment</a> for an example.</p>
 </div>
 </div>
 </div>
@@ -480,7 +480,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ENONIC_APP_NAME</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">XP application key that owns the content types and component descriptors used by the project.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enonic application name, used in queries and component mappings. Must match the name of your XP application.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ENONIC_MAPPINGS</code></p></td>
@@ -493,19 +493,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">Shared secret used by the starter&#8217;s proxy and protected API routes. It must match the Next.XP app configuration.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GUILLOTINE_API</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Guillotine API appended to <code>ENONIC_API</code>. Default: <code>com.enonic.app.guillotine:graphql</code>.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ENONIC_MEDIA_CDN</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Base URL for images and attachments. Default: <code>ENONIC_API</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Absolute media API base URL. Defaults to <code>ENONIC_API</code>; override when media is served from another host, such as a CDN.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ENONIC_ADMIN</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enonic admin URL, used for CORS when the admin is served from a different domain than the API. Default: the origin of <code>ENONIC_API</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content Studio URL used to set CORS headers that let Content Studio access the preview. Defaults to the origin of <code>ENONIC_API</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ENONIC_LOGGING</code></p></td>
@@ -514,14 +509,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 </tbody>
 </table>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">ENONIC_API=https://xp.example.com/api
-ENONIC_APP_NAME=com.example.site
-ENONIC_MAPPINGS=en:website/site,no:website-no/site
-ENONIC_API_TOKEN=replace-with-a-long-random-value</code></pre>
-</div>
-</div>
 <div class="paragraph">
 <p>Development-only diagnostics and catch-all behavior are enabled when <code>NODE_ENV</code> is <code>development</code>, as under <code>next dev</code>.</p>
 </div>
@@ -531,10 +518,10 @@ ENONIC_API_TOKEN=replace-with-a-long-random-value</code></pre>
 <h2 id="server_and_client_configuration"><a class="link" href="#server_and_client_configuration">Server and client configuration</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The v6 starter uses the server variables above and does not require <code>NEXT_PUBLIC_</code> copies. Importing a common adapter export in a client component does not by itself require exposing the environment configuration.</p>
+<p>Keep the variables above server-side; do not create <code>NEXT_PUBLIC_</code> copies. Importing a common adapter export in a client component does not require exposing the environment configuration.</p>
 </div>
 <div class="paragraph">
-<p>For custom client components, pass the required non-secret data or resolved URLs from the server. The adapter still supports optional public values for client-side helpers that read configuration, but these are not part of the standard starter setup.</p>
+<p>For custom client components, pass only the required non-secret data or resolved URLs from the server.</p>
 </div>
 <div class="paragraph">
 <p>Never publish <code>ENONIC_API_TOKEN</code>. Values prefixed with <code>NEXT_PUBLIC_</code> are embedded in browser JavaScript.</p>
@@ -555,7 +542,7 @@ ENONIC_API_TOKEN=replace-with-a-long-random-value</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 11:41:42 UTC
+Last updated 2026-11-04 12:54:57 UTC
 </div>
 </div>
 </body>

@@ -973,7 +973,7 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <div class="sect2">
 <h3 id="imageurl"><a class="link" href="#imageurl">imageUrl</a></h3>
 <div class="paragraph">
-<p>Builds an absolute image URL from the result of <code>imageUrlQuery()</code>: the media base URL (<code>ENONIC_MEDIA_CDN</code>, default <code>ENONIC_API</code>) followed by the media part of <code>path</code> and the <code>queryString</code>. In client code without a <code>NEXT_PUBLIC_</code> copy of these variables, the path is returned unchanged.</p>
+<p>Builds an absolute image URL from the result of <code>imageUrlQuery()</code>: the media base URL (<code>ENONIC_MEDIA_CDN</code>, default <code>ENONIC_API</code>) followed by the media part of <code>path</code> and the <code>queryString</code>. Resolve the URL on the server and pass it to client components so the environment configuration stays server-side.</p>
 </div>
 <div class="paragraph lead">
 <p>Parameters</p>
@@ -1798,7 +1798,7 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 11:41:42 UTC
+Last updated 2026-11-04 12:54:57 UTC
 </div>
 </div>
 </body>

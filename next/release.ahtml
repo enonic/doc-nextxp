@@ -611,7 +611,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="new_api_url_format"><a class="link" href="#new_api_url_format">New API URL format</a></h3>
 <div class="paragraph">
-<p><code>ENONIC_API</code> points to the XP API root (for example <code><a href="http://localhost:8080/api" class="bare">http://localhost:8080/api</a></code>) instead of the <code>/site</code> endpoint. The Guillotine endpoint is <code>ENONIC_API</code> + <code>/</code> + <code>GUILLOTINE_API</code> (default <code>com.enonic.app.guillotine:graphql</code>).</p>
+<p><code>ENONIC_API</code> points to the XP API root (for example <code><a href="http://localhost:8080/api" class="bare">http://localhost:8080/api</a></code>) instead of the <code>/site</code> endpoint. The Guillotine endpoint is <code>ENONIC_API</code> + <code>/com.enonic.app.guillotine:graphql</code>.</p>
 </div>
 <div class="paragraph">
 <p>See the <a href="upgrade.ahtml">upgrade notes</a> for migration steps, removed APIs, and changed function signatures.</p>
@@ -622,7 +622,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 11:41:42 UTC
+Last updated 2026-11-04 12:54:57 UTC
 </div>
 </div>
 </body>
