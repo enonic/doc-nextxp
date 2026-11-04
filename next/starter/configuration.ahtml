@@ -443,7 +443,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#environment">Environment</a></li>
 <li><a href="#shared_secret">Shared secret</a></li>
-<li><a href="#component_registry">Component registry</a></li>
 <li><a href="#rendering_and_caching">Rendering and caching</a></li>
 </ul>
 </div>
@@ -467,15 +466,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlight"><code class="language-text" data-lang="text">ENONIC_API=http://localhost:8080/api
 ENONIC_APP_NAME=com.example.site
 ENONIC_MAPPINGS=en:website/site
-ENONIC_API_TOKEN=replace-this-secret
-
-NEXT_PUBLIC_ENONIC_API=$ENONIC_API
-NEXT_PUBLIC_ENONIC_APP_NAME=$ENONIC_APP_NAME
-NEXT_PUBLIC_ENONIC_MAPPINGS=$ENONIC_MAPPINGS</code></pre>
+ENONIC_API_TOKEN=replace-this-secret</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The browser-visible variables contain routing and API location information, not credentials. Do not create <code>NEXT_PUBLIC_ENONIC_API_TOKEN</code>.</p>
+<p>These settings are read on the server. The v6 starter does not require <code>NEXT_PUBLIC_</code> copies. Keep <code>ENONIC_API_TOKEN</code> server-side.</p>
 </div>
 <div class="paragraph">
 <p>See <a href="../nextjs/configuration.ahtml">Configuration</a> for the complete variable reference and <a href="../concepts/localization.ahtml">Projects and localization</a> for mapping syntax.</p>
@@ -491,22 +486,6 @@ NEXT_PUBLIC_ENONIC_MAPPINGS=$ENONIC_MAPPINGS</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="component_registry"><a class="link" href="#component_registry">Component registry</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Replace the catch-all development mapping with explicit application mappings. Keep this import before custom registrations:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import '@enonic/nextjs-adapter/baseMappings';</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Set a shared query only when multiple views need the same data. Its result is added to <code>props.common</code> throughout the page tree.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="rendering_and_caching"><a class="link" href="#rendering_and_caching">Rendering and caching</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -515,12 +494,15 @@ NEXT_PUBLIC_ENONIC_MAPPINGS=$ENONIC_MAPPINGS</code></pre>
 <div class="paragraph">
 <p>Keep <code>transpilePackages</code>, the <code>@phrases</code> aliases, <code>env.BUILD_ID</code>, the CORS headers, and the Content Studio-compatible response policy when modifying <code>next.config.js</code>.</p>
 </div>
+<div class="paragraph">
+<p>For application code that connects XP content types and page components to React views, see <a href="../concepts/components.ahtml">Components and views</a>.</p>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-03 10:32:45 UTC
+Last updated 2026-11-04 11:41:42 UTC
 </div>
 </div>
 </body>

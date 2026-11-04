@@ -442,7 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#server_variables">Server variables</a></li>
-<li><a href="#browser_visible_variables">Browser-visible variables</a></li>
+<li><a href="#server_and_client_configuration">Server and client configuration</a></li>
 <li><a href="#next_js_configuration">Next.js configuration</a></li>
 </ul>
 </div>
@@ -528,18 +528,13 @@ ENONIC_API_TOKEN=replace-with-a-long-random-value</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="browser_visible_variables"><a class="link" href="#browser_visible_variables">Browser-visible variables</a></h2>
+<h2 id="server_and_client_configuration"><a class="link" href="#server_and_client_configuration">Server and client configuration</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When common adapter exports are used in client bundles, publish the non-secret equivalents explicitly:</p>
+<p>The v6 starter uses the server variables above and does not require <code>NEXT_PUBLIC_</code> copies. Importing a common adapter export in a client component does not by itself require exposing the environment configuration.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text">NEXT_PUBLIC_ENONIC_API=$ENONIC_API
-NEXT_PUBLIC_ENONIC_APP_NAME=$ENONIC_APP_NAME
-NEXT_PUBLIC_ENONIC_MAPPINGS=$ENONIC_MAPPINGS
-NEXT_PUBLIC_ENONIC_MEDIA_CDN=$ENONIC_MEDIA_CDN</code></pre>
-</div>
+<div class="paragraph">
+<p>For custom client components, pass the required non-secret data or resolved URLs from the server. The adapter still supports optional public values for client-side helpers that read configuration, but these are not part of the standard starter setup.</p>
 </div>
 <div class="paragraph">
 <p>Never publish <code>ENONIC_API_TOKEN</code>. Values prefixed with <code>NEXT_PUBLIC_</code> are embedded in browser JavaScript.</p>
@@ -560,7 +555,7 @@ NEXT_PUBLIC_ENONIC_MEDIA_CDN=$ENONIC_MEDIA_CDN</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-03 10:32:45 UTC
+Last updated 2026-11-04 11:41:42 UTC
 </div>
 </div>
 </body>

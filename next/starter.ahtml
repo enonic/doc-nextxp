@@ -647,7 +647,18 @@ Follow the <a href="https://developer.enonic.com/learn/next.xp">Next.XP tutorial
 <div class="sect2">
 <h3 id="components_and_data"><a class="link" href="#components_and_data">Components and data</a></h3>
 <div class="paragraph">
-<p><code>src/components/_mappings.ts</code> imports the adapter&#8217;s base mappings, registers the shared query, and maps application descriptors. Keep queries close to their consuming views; shared data belongs under <code>src/components/queries/</code>.</p>
+<p>The component registry connects XP content types and page components to their GraphQL queries and React views. These mappings are application code, defined in <code>src/components/_mappings.ts</code>. Import the adapter&#8217;s built-in mappings before registering your own:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import '@enonic/nextjs-adapter/baseMappings';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add explicit mappings for your application&#8217;s content types and page components before using the site in production. See <a href="concepts/components.ahtml">Components and views</a> for registration examples and the development fallback behavior.</p>
+</div>
+<div class="paragraph">
+<p>Keep queries close to their consuming views. Use a shared query only when multiple views need the same data; its result is available as <code>props.common</code>. The starter keeps shared queries in <code>src/components/queries/</code>.</p>
 </div>
 <div class="paragraph">
 <p>Static front-end dictionaries for server and client phrase localization live in <code>src/phrases/&lt;locale&gt;.json</code>. The <code>@phrases</code> alias is configured in <code>next.config.js</code> for webpack and Turbopack.</p>
@@ -679,14 +690,14 @@ Follow the <a href="https://developer.enonic.com/learn/next.xp">Next.XP tutorial
 <p>The starter is not the tutorial&#8217;s completed example. The finished reference implementation lives in <a href="https://github.com/enonic/demo-nextjs"><code>demo-nextjs</code></a>.</p>
 </div>
 <div class="paragraph">
-<p>See <a href="starter/configuration.ahtml">Starter configuration</a> for environment variables, the shared secret, component mappings, and rendering choices.</p>
+<p>See <a href="starter/configuration.ahtml">Starter configuration</a> for environment variables, the shared secret, and rendering choices.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-03 10:32:45 UTC
+Last updated 2026-11-04 11:41:42 UTC
 </div>
 </div>
 </body>
