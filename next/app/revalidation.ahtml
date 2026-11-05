@@ -463,7 +463,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="content_events"><a class="link" href="#content_events">Content events</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The app subscribes to XP repository and node events for projects containing a site configured with Next.XP. Published changes are sent to the front end selected by that site&#8217;s configuration.</p>
+<p>The Next.XP app subscribes to XP repository and node events for projects containing a site configured with Next.XP. Published changes are sent to the front end selected by that site&#8217;s configuration.</p>
 </div>
 <div class="paragraph">
 <p>The subscriber runs on the XP cluster master so a clustered installation does not send the same notification from every node. Bulk events are debounced before the front end is called.</p>
@@ -474,7 +474,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="paths_and_projects"><a class="link" href="#paths_and_projects">Paths and projects</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Normal publish events invalidates the affected site. Move and rename events also retain the previous path, allowing both the old and new public routes to be invalidated.</p>
+<p>Normal publish events request revalidation without a content path, which makes the starter invalidate its complete layout tree. Move and rename events also retain the previous path, allowing old public routes to be invalidated explicitly.</p>
 </div>
 <div class="paragraph">
 <p>The active XP project is sent in the encrypted <code>xp</code> parameter and in the <code>Content-Studio-Project</code> header. The front end uses it to resolve the correct locale and project mapping before invalidating paths.</p>
@@ -485,7 +485,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="front_end_endpoint"><a class="link" href="#front_end_endpoint">Front-end endpoint</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The app calls the protected <code>/api/revalidate</code> route on the selected Next.js front end. The starter provides the canonical route handler; a custom front end must implement the same integration contract.</p>
+<p>The Next.XP app calls the protected <code>/api/revalidate</code> route on the selected Next.js front end. The starter provides the canonical route handler; a custom front end must implement the same integration contract.</p>
 </div>
 <div class="paragraph">
 <p>The handler decrypts the <code>xp</code> parameter with the shared secret and applies Next.js path revalidation to the affected routes or the entire site, depending on the presence of the <code>path</code> parameter. The front end remains responsible for its caching policy and for any additional tags or application-specific caches.</p>
@@ -512,7 +512,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

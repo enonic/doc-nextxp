@@ -645,11 +645,11 @@ const imageSelection = `
 <div class="content">
 <pre class="highlight"><code class="language-tsx" data-lang="tsx">import {imageUrl} from '@enonic/nextjs-adapter';
 
-&lt;img src={imageUrl(photo.imageUrl)} alt=""/&gt;</code></pre>
+&lt;img src={imageUrl(photo.imageUrl, meta)} alt=""/&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Use <code>mediaUrlQuery()</code>/<code>mediaUrl()</code> and <code>attachmentUrlQuery()</code>/<code>attachmentUrl()</code> for other media and attachments. For content links, select <code>pageUrlQuery()</code> and render the result with <code>pageUrl(data, meta)</code>.</p>
+<p>Use <code>mediaUrlQuery()</code>/<code>mediaUrl(data, meta)</code> and <code>attachmentUrlQuery()</code>/<code>attachmentUrl(data, meta)</code> for other media and attachments. The metadata selects the starter&#8217;s <code>/api/media</code> proxy for draft media and the API or CDN URL for published media. The new starter already includes the proxy route; preserve it when moving your custom code. For content links, select <code>pageUrlQuery()</code> and render the result with <code>pageUrl(data, meta)</code>.</p>
 </div>
 <div class="paragraph">
 <p>Use the adapter&#8217;s <code>richTextQuery</code> and <code>RichTextView</code> for rich-text links and images. Review any custom rich-text rendering that assumes URL fields are strings. Reference files in <code>public/</code> directly, for example <code>/images/logo.svg</code>, instead of using the removed <code>getAsset()</code> helper.</p>
@@ -741,7 +741,7 @@ const imageSelection = `
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

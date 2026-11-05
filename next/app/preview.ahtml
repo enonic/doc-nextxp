@@ -443,7 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#request_flow">Request flow</a></li>
 <li><a href="#url_mappings">URL mappings</a></li>
-<li><a href="#content_security_policy">Content Security Policy</a></li>
+<li><a href="#content-security-policy">Content Security Policy</a></li>
 <li><a href="#front_end_selection">Front-end selection</a></li>
 <li><a href="#front_end_endpoints">Front-end endpoints</a></li>
 <li><a href="#component_refresh">Component refresh</a></li>
@@ -471,16 +471,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Content Studio requests preview of content inside a site.</p>
 </li>
 <li>
-<p>The app selects the site&#8217;s named front-end configuration and shared secret.</p>
+<p>The Next.XP app selects the site&#8217;s named front-end configuration and shared secret.</p>
 </li>
 <li>
-<p>It encrypts the XP project with the secret into an <code>xp</code> parameter and fetches URL mapping rules from the front end&#8217;s <code>/api/mappings</code>.</p>
+<p>It encrypts the XP project, the editor&#8217;s XP session ID, and a timestamp with the shared secret into an <code>xp</code> parameter and fetches URL mapping rules from the front end&#8217;s <code>/api/mappings</code>.</p>
 </li>
 <li>
 <p>It resolves the content item to a Next.js URL using those rules and returns the URL, with the <code>xp</code> parameter, to Content Studio.</p>
 </li>
 <li>
-<p>Content Studio loads the URL in the preview pane. The front end validates the <code>xp</code> parameter through <code>/api/preview</code>, enables Next.js Draft Mode, and redirects to the requested content path.</p>
+<p>Content Studio loads the URL in the preview pane. If Draft Mode needs enabling, the front end validates the <code>xp</code> parameter through <code>/api/preview</code>, sets the draft cookie, and redirects to the requested content path. Subsequent requests reuse the valid cookie.</p>
 </li>
 <li>
 <p>The adapter detects Draft Mode and fetches content from the project&#8217;s <code>draft</code> branch.</p>
@@ -534,15 +534,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The starter returns a single catch-all rule and prefixes its target with the project&#8217;s locale, unless it is the default locale, using <code>localizeMappings()</code>. It answers <code>404</code> when the project in the blob is not listed in <code>ENONIC_MAPPINGS</code>; the live view extension then finds no mapping.</p>
 </div>
 <div class="paragraph">
-<p>The app caches the rules per project, for up to 24 hours. A failed request is not cached.</p>
+<p>The Next.XP app caches the rules per project, for up to 24 hours. A failed request is not cached.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="content_security_policy"><a class="link" href="#content_security_policy">Content Security Policy</a></h2>
+<h2 id="content-security-policy"><a class="link" href="#content-security-policy">Content Security Policy</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Content Studio&#8217;s Content Security Policy must allow the Next.js origin to load the preview. The app uses XP 8.1&#8217;s CSP API through an <a href="https://developer.enonic.com/docs/code/stable/web/extensions/processors">extension response processor</a> to add the origin of every URL in <code>com.enonic.app.nextxp.cfg</code> to the <code>frame-src</code>, <code>connect-src</code>, and <code>style-src</code> directives. These contributions extend the existing policy; no manual <code>contentSecurityPolicy.header</code> configuration for Next.XP is needed.</p>
+<p>Content Studio&#8217;s Content Security Policy must allow the Next.js origin to load the preview. The Next.XP app uses XP 8.1&#8217;s CSP API through an <a href="https://developer.enonic.com/docs/code/stable/web/extensions/processors">extension response processor</a> to add the origin of every URL in <code>com.enonic.app.nextxp.cfg</code> to the <code>frame-src</code>, <code>connect-src</code>, and <code>style-src</code> directives. These contributions extend the existing policy; no manual <code>contentSecurityPolicy.header</code> configuration for Next.XP is needed.</p>
 </div>
 <div class="paragraph">
 <p>When no URL is configured, the default <code><a href="http://localhost:3000" class="bare">http://localhost:3000</a></code> origin is added only when XP runs in dev mode.</p>
@@ -584,7 +584,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>/api/mappings</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Returns the rules the app uses to resolve content items to Next.js URLs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns the rules the Next.XP app uses to resolve content items to Next.js URLs.</p></td>
 </tr>
 </tbody>
 </table>
@@ -594,7 +594,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="component_refresh"><a class="link" href="#component_refresh">Component refresh</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Content Studio can request one component without refreshing the complete page. The request goes directly to Next.js; the app is not involved. The adapter restricts the page tree to the requested component, and <code>MainView</code> delegates rendering to <code>SingleComponent</code>.</p>
+<p>Content Studio can request one component without refreshing the complete page. The request goes directly to Next.js; the Next.XP app is not involved. The adapter restricts the page tree to the requested component, and <code>MainView</code> delegates rendering to <code>SingleComponent</code>.</p>
 </div>
 </div>
 </div>
@@ -612,7 +612,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

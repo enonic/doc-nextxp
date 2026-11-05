@@ -491,6 +491,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tbody>
 </table>
 <div class="paragraph">
+<p>The starter also exposes <code>/api/media</code> for browser requests for authenticated draft media. Published media uses the API or CDN directly. See <a href="nextjs/rich-text.ahtml#media-proxy">Draft media proxy</a>.</p>
+</div>
+<div class="paragraph">
 <p>The locale-aware catch-all route and proxy complete the standard setup. They convert public Next.js paths into the project and site context required by Guillotine.</p>
 </div>
 </div>
@@ -530,7 +533,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

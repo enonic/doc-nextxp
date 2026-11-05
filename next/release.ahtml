@@ -452,6 +452,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#cors_headers">CORS headers</a></li>
 <li><a href="#guillotine_9">Guillotine 9</a></li>
 <li><a href="#front_end_url_handling">Front-end URL handling</a></li>
+<li><a href="#draft_media_proxy">Draft media proxy</a></li>
 <li><a href="#new_api_url_format">New API URL format</a></li>
 </ul>
 </li>
@@ -510,6 +511,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>The adapter&#8217;s <a href="adapter/views.ahtml#draft-mode-indicator">DraftModeIndicator</a> provides a button to exit draft mode when the page is opened outside Content Studio. The starter includes it in the page layout. Clicking the button disables draft mode and reloads the page without the preview parameter, returning to the live site with published content.</p>
 </div>
+<div class="paragraph">
+<p>See <a href="starter/configuration.ahtml#exit-draft-mode">Starter configuration</a> to enable or remove the button and customize its label.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="default_locale_url_redirects"><a class="link" href="#default_locale_url_redirects">Default-locale URL redirects</a></h3>
@@ -565,7 +569,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The Next.XP app uses XP 8.1&#8217;s new Content Security Policy API through an <a href="https://developer.enonic.com/docs/code/stable/web/extensions/processors">extension response processor</a>. It adds the configured front-end origins to Content Studio&#8217;s <code>frame-src</code>, <code>connect-src</code>, and <code>style-src</code> directives, extending the existing policy automatically.</p>
 </div>
 <div class="paragraph">
-<p>Manual <code>contentSecurityPolicy.header</code> configuration for Next.XP is no longer needed. When no front-end URL is configured, the app allows <code><a href="http://localhost:3000" class="bare">http://localhost:3000</a></code> as a fallback in dev mode only.</p>
+<p>Manual <code>contentSecurityPolicy.header</code> configuration for Next.XP is no longer needed. When no front-end URL is configured, the Next.XP app allows <code><a href="http://localhost:3000" class="bare">http://localhost:3000</a></code> as a fallback in dev mode only.</p>
 </div>
 </div>
 <div class="sect2">
@@ -597,7 +601,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>Page links</strong>: <code>pageUrlQuery()</code> selects the URL components; <code>pageUrl(data, meta)</code> builds a relative Next.js URL, adds a prefix for non-default locales, and preserves query parameters.</p>
 </li>
 <li>
-<p><strong>Images and attachments</strong>: <code>imageUrlQuery()</code>, <code>mediaUrlQuery()</code>, and <code>attachmentUrlQuery()</code> select the components. Their matching URL helpers combine them with <code>ENONIC_MEDIA_CDN</code>, which defaults to <code>ENONIC_API</code>. XP no longer needs <code>media.defaultBaseUrl</code> configuration.</p>
+<p><strong>Images and attachments</strong>: <code>imageUrlQuery()</code>, <code>mediaUrlQuery()</code>, and <code>attachmentUrlQuery()</code> select the components. Their matching URL helpers take <code>(data, meta)</code>, routing draft media through the starter&#8217;s <code>/api/media</code> proxy. Published media uses <code>ENONIC_MEDIA_CDN</code>, which defaults to <code>ENONIC_API</code>.</p>
 </li>
 <li>
 <p><strong>Rich text</strong>: <code>richTextQuery()</code> retrieves structured link and image data alongside the HTML. <code>RichTextView</code> uses it to replace URL placeholders with front-end URLs.</p>
@@ -606,6 +610,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="paragraph">
 <p>Custom queries and views must adopt this model. See <a href="nextjs/rich-text.ahtml">Rich text, links, and media</a> for Next.XP usage and <a href="https://developer.enonic.com/docs/guillotine/stable/usage/images-and-urls">Guillotine URL components</a> for the underlying fields.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="draft_media_proxy"><a class="link" href="#draft_media_proxy">Draft media proxy</a></h3>
+<div class="paragraph">
+<p>The starter includes <code>/api/media</code> for authenticated draft images and attachments. It forwards the editor&#8217;s XP session server-side, so preview images work when Content Studio and Next.js use different domains. Draft media is streamed without caching; published media continues to load directly from the API or CDN. See <a href="nextjs/rich-text.ahtml#media-proxy">Draft media proxy</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -622,7 +632,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

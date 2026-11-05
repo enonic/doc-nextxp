@@ -471,7 +471,7 @@ import Hero from './views/Hero';
 
 ComponentRegistry.addPart('com.example.app:hero', {
     query: `query {
-      guillotine(siteKey: $siteKey, project: $project, branch: $branch) {
+      guillotine(scopeKey: $scopeKey, project: $project, branch: $branch) {
         get(key: $path) { displayName }
       }
     }`,
@@ -513,7 +513,7 @@ ComponentRegistry.addPart('com.example.app:hero', {
 </tbody>
 </table>
 <div class="paragraph">
-<p>Queries must pass <code>siteKey</code>, <code>project</code>, and <code>branch</code> to the <code>guillotine()</code> field. The adapter supplies these variables, together with <code>path</code>.</p>
+<p>Queries must pass <code>scopeKey</code>, <code>project</code>, and <code>branch</code> to the <code>guillotine()</code> field. The adapter supplies these variables, together with <code>path</code>.</p>
 </div>
 <div class="paragraph">
 <p>Content types, pages, layouts, parts, macros, and generic component kinds have separate registration methods, but all mappings share the same query, processor, and view properties. See <a href="../adapter/common.ahtml#component-definition-params">Adapter type definitions</a> for more details.</p>
@@ -548,7 +548,7 @@ ComponentRegistry.addPart('com.example.app:hero', {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

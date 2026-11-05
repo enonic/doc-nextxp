@@ -594,7 +594,7 @@ Follow the <a href="https://developer.enonic.com/learn/next.xp">Next.XP tutorial
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/[locale]/[[&#8230;&#8203;contentPath]]/layout.tsx</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Handles complete-page and single-component responses and preserves editor HTML during hydration.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Handles complete-page and single-component responses, preserves editor HTML during hydration, and includes the exit Draft Mode button.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/[locale]/layout.tsx</code></p></td>
@@ -636,6 +636,10 @@ Follow the <a href="https://developer.enonic.com/learn/next.xp">Next.XP tutorial
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/api/revalidate/route.ts</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Accepts secured publication notifications and calls <code>revalidatePath()</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/app/api/media/[&#8230;&#8203;path]/route.ts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Streams authenticated draft media through <code>/api/media</code>. Published media uses the API or CDN directly. See <a href="nextjs/rich-text.ahtml#media-proxy">Draft media proxy</a>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/proxy.ts</code></p></td>
@@ -690,14 +694,14 @@ Follow the <a href="https://developer.enonic.com/learn/next.xp">Next.XP tutorial
 <p>The starter is not the tutorial&#8217;s completed example. The finished reference implementation lives in <a href="https://github.com/enonic/demo-nextjs"><code>demo-nextjs</code></a>.</p>
 </div>
 <div class="paragraph">
-<p>See <a href="starter/configuration.ahtml">Starter configuration</a> for environment variables, the shared secret, and rendering choices.</p>
+<p>See <a href="starter/configuration.ahtml">Starter configuration</a> for environment variables, the shared secret, and rendering choices, including how to <a href="starter/configuration.ahtml#exit-draft-mode">enable or remove the exit Draft Mode button</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

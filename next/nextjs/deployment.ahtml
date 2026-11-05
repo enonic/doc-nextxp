@@ -487,6 +487,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">Content and page queries</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Next.js server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">XP media API</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authenticated draft media requests</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">XP server</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Next.js server</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">URL mappings and revalidation</p></td>
@@ -494,7 +499,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Browser</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Next.js server</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Public site traffic and Content Studio preview</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Public site traffic, Content Studio preview, and draft media through <code>/api/media</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">XP media API or CDN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Published media</p></td>
 </tr>
 </tbody>
 </table>
@@ -527,7 +537,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The front-end response policy allows Content Studio to embed the site.</p>
 </li>
 <li>
-<p>Preview, mappings, and revalidation API routes are deployed with a server runtime.</p>
+<p>Preview, mappings, revalidation, and media API routes are deployed with a server runtime.</p>
+</li>
+<li>
+<p>Caching is bypassed for <code>/api/media</code>, including error responses.</p>
 </li>
 </ul>
 </div>
@@ -547,7 +560,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

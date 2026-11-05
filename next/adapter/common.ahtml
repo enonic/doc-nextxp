@@ -460,6 +460,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#mediaurl">mediaUrl</a></li>
 <li><a href="#attachmenturl">attachmentUrl</a></li>
 <li><a href="#pageurl">pageUrl</a></li>
+<li><a href="#richtextquery">richTextQuery</a></li>
 <li><a href="#richtextfragments">richTextFragments</a></li>
 <li><a href="#withrichtextfragments">withRichTextFragments</a></li>
 <li><a href="#sanitizegraphqlname">sanitizeGraphqlName</a></li>
@@ -482,6 +483,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#image-url">ImageUrl</a></li>
 <li><a href="#attachment-url">AttachmentUrl</a></li>
 <li><a href="#page-url">PageUrl</a></li>
+<li><a href="#media-url-meta">MediaUrlMeta</a></li>
 <li><a href="#media-url-args">MediaUrlArgs</a></li>
 <li><a href="#meta-data">MetaData</a></li>
 </ul>
@@ -818,7 +820,7 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <p>Parameters</p>
 </div>
 <div class="paragraph">
-<p><code>imageUrlQuery()</code> takes a single <code>args</code> object with these properties:</p>
+<p><code>imageUrlQuery()</code> takes an optional <code>args</code> object with these properties:</p>
 </div>
 <table class="tableblock frame-none grid-none stretch">
 <colgroup>
@@ -838,7 +840,7 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>scale</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Image scale, for example <code>width(500)</code> or <code>block(100,100)</code>.</p>
+<p><strong>Optional.</strong> Image scale, for example <code>width(500)</code> or <code>block(100,100)</code>. Omit to use Guillotine&#8217;s default.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -867,13 +869,6 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>Optional.</strong> Image filter.</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Record&lt;string, unknown&gt;</code></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>Optional.</strong> Extra query parameters added to the URL.</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -932,7 +927,7 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <div class="sect2">
 <h3 id="pageurlquery"><a class="link" href="#pageurlquery">pageUrlQuery</a></h3>
 <div class="paragraph">
-<p>Returns the Guillotine selection <code>pageUrl(&lt;args&gt;) { url path queryString }</code>.</p>
+<p>Returns the Guillotine selection <code>pageUrl(&lt;args&gt;) { baseUrl path queryString }</code>.</p>
 </div>
 <div class="paragraph lead">
 <p>Parameters</p>
@@ -973,14 +968,41 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <div class="sect2">
 <h3 id="imageurl"><a class="link" href="#imageurl">imageUrl</a></h3>
 <div class="paragraph">
-<p>Builds an absolute image URL from the result of <code>imageUrlQuery()</code>: the media base URL (<code>ENONIC_MEDIA_CDN</code>, default <code>ENONIC_API</code>) followed by the media part of <code>path</code> and the <code>queryString</code>. Resolve the URL on the server and pass it to client components so the environment configuration stays server-side.</p>
+<p>Builds an image URL from the result of <code>imageUrlQuery()</code>. For <code>meta.branch === 'draft'</code>, it appends the media endpoint path and query string to <code>/api/media</code>. For published content, it uses the media base URL (<code>ENONIC_MEDIA_CDN</code>, default <code>ENONIC_API</code>). See <a href="../nextjs/rich-text.ahtml#media-proxy">Draft media proxy</a>. Resolve the URL on the server and pass it to client components so the environment configuration stays server-side.</p>
 </div>
 <div class="paragraph lead">
 <p>Parameters</p>
 </div>
-<div class="paragraph">
-<p><code>data</code> (<a href="#image-url">ImageUrl</a>, or any object with <code>path</code> and an optional <code>queryString</code>) — URL object from Guillotine. May be <code>null</code> or <code>undefined</code>.</p>
-</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#image-url">ImageUrl</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>URL object from Guillotine. Only <code>path</code> is required; <code>queryString</code> is optional. May be <code>null</code> or <code>undefined</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#media-url-meta">MediaUrlMeta</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Branch context, usually the page&#8217;s <a href="#meta-data">MetaData</a>.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph lead">
 <p>Returns</p>
 </div>
@@ -991,14 +1013,41 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <div class="sect2">
 <h3 id="mediaurl"><a class="link" href="#mediaurl">mediaUrl</a></h3>
 <div class="paragraph">
-<p>Builds an absolute media URL from the result of <code>mediaUrlQuery()</code>, in the same way as <code>imageUrl()</code>.</p>
+<p>Builds a draft-proxy or published media URL from the result of <code>mediaUrlQuery()</code>, in the same way as <code>imageUrl()</code>.</p>
 </div>
 <div class="paragraph lead">
 <p>Parameters</p>
 </div>
-<div class="paragraph">
-<p><code>data</code> (<a href="#attachment-url">AttachmentUrl</a>, or any object with <code>path</code> and an optional <code>queryString</code>) — URL object from Guillotine. May be <code>null</code> or <code>undefined</code>.</p>
-</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#attachment-url">AttachmentUrl</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>URL object from Guillotine. Only <code>path</code> is required; <code>queryString</code> is optional. May be <code>null</code> or <code>undefined</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#media-url-meta">MediaUrlMeta</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Branch context, usually the page&#8217;s <a href="#meta-data">MetaData</a>.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph lead">
 <p>Returns</p>
 </div>
@@ -1009,14 +1058,41 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <div class="sect2">
 <h3 id="attachmenturl"><a class="link" href="#attachmenturl">attachmentUrl</a></h3>
 <div class="paragraph">
-<p>Builds an absolute attachment URL from the result of <code>attachmentUrlQuery()</code>, in the same way as <code>imageUrl()</code>.</p>
+<p>Builds a draft-proxy or published attachment URL from the result of <code>attachmentUrlQuery()</code>, in the same way as <code>imageUrl()</code>.</p>
 </div>
 <div class="paragraph lead">
 <p>Parameters</p>
 </div>
-<div class="paragraph">
-<p><code>data</code> (<a href="#attachment-url">AttachmentUrl</a>, or any object with <code>path</code> and an optional <code>queryString</code>) — URL object from Guillotine. May be <code>null</code> or <code>undefined</code>.</p>
-</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#attachment-url">AttachmentUrl</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>URL object from Guillotine. Only <code>path</code> is required; <code>queryString</code> is optional. May be <code>null</code> or <code>undefined</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meta</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#media-url-meta">MediaUrlMeta</a></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Branch context, usually the page&#8217;s <a href="#meta-data">MetaData</a>.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph lead">
 <p>Returns</p>
 </div>
@@ -1075,6 +1151,99 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <div class="content">
 <pre class="highlight"><code class="language-tsx" data-lang="tsx">&lt;Link href={pageUrl(parent.pageUrl, meta)}&gt;Back&lt;/Link&gt;
 &lt;Link href={pageUrl({path: '/'}, meta)}&gt;Home&lt;/Link&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="richtextquery"><a class="link" href="#richtextquery">richTextQuery</a></h3>
+<div class="paragraph">
+<p>Returns the selection for a rich-text field, including processed HTML and structured references for images, links, and registered macros. <code>fetchGuillotine()</code> appends the required fragment definitions automatically.</p>
+</div>
+<div class="paragraph lead">
+<p>Parameters</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fieldName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Name of the rich-text field in the content or component schema.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>options</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>object</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Image settings listed below.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The optional <code>options</code> object has these properties:</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageWidths</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>number[]</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Responsive image widths. Default: <code>[400, 800, 1200]</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageSizes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> HTML sizes expression. Default: <code>(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageSrcWidth</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>number</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Optional.</strong> Primary image width. Omitted by default, leaving Guillotine&#8217;s default in effect.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph lead">
+<p>Returns</p>
+</div>
+<div class="paragraph">
+<p><code>string</code>.</p>
+</div>
+<div class="paragraph lead">
+<p>Example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">const bodySelection = richTextQuery('body', {imageWidths: [640, 1280]});</code></pre>
 </div>
 </div>
 </div>
@@ -1480,7 +1649,7 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>siteKey</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scopeKey</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Site path from the locale mapping.</p>
@@ -1566,13 +1735,6 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>url</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Ready-made URL, with the base URL resolved by XP.</p>
-</div></div></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1627,7 +1789,7 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <div class="sect2">
 <h3 id="attachment-url"><a class="link" href="#attachment-url">AttachmentUrl</a></h3>
 <div class="paragraph">
-<p>Result of <code>mediaUrlQuery()</code> and <code>attachmentUrlQuery()</code>. It has the <code>url</code>, <code>path</code>, <code>queryString</code>, <code>context</code>, <code>id</code>, <code>fingerprint</code>, and <code>name</code> fields of <a href="#image-url">ImageUrl</a>, plus:</p>
+<p>Result of <code>mediaUrlQuery()</code> and <code>attachmentUrlQuery()</code>. It has the <code>path</code>, <code>queryString</code>, <code>context</code>, <code>id</code>, <code>fingerprint</code>, and <code>name</code> fields of <a href="#image-url">ImageUrl</a>, plus:</p>
 </div>
 <table class="tableblock frame-none grid-none stretch">
 <colgroup>
@@ -1673,10 +1835,10 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>baseUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>URL as XP resolves it.</p>
+<p>Base URL resolved by XP. The adapter&#8217;s <code>pageUrl()</code> uses the path and locale to construct the Next.js URL instead.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -1691,6 +1853,35 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>URL-escaped query string.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="media-url-meta"><a class="link" href="#media-url-meta">MediaUrlMeta</a></h3>
+<div class="paragraph">
+<p>Branch context shared by <code>imageUrl()</code>, <code>mediaUrl()</code>, and <code>attachmentUrl()</code>.</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 1%;">
+<col style="width: 1%;">
+<col style="width: 98%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>branch</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>draft</code> selects the <code>/api/media</code> proxy. Published content uses <code>master</code> and the configured API or CDN media base URL.</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -1717,13 +1908,6 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>Optional.</strong> Serve the file as a download.</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>params</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Record&lt;string, unknown&gt;</code></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>Optional.</strong> Extra query parameters added to the URL.</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -1778,15 +1962,11 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>RENDER_MODE_HEADER</code>, <code>PROJECT_ID_HEADER</code>, <code>XP_BASE_URL_HEADER</code>, <code>JSESSIONID_HEADER</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Header names shared with the XP preview proxy.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Header names used to pass rendering, project, and session context through the integration.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>PORTAL_COMPONENT_ATTRIBUTE</code>, <code>PORTAL_REGION_ATTRIBUTE</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">DOM attributes used by Content Studio editing.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>richTextQuery</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Guillotine selection required for processed rich-text references.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1798,7 +1978,7 @@ return NextResponse.json({mappings: localizeMappings(MAPPINGS, mapping)});</code
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

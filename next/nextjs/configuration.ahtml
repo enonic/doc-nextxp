@@ -495,7 +495,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ENONIC_MEDIA_CDN</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Absolute media API base URL. Defaults to <code>ENONIC_API</code>; override when media is served from another host, such as a CDN.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Absolute media API base URL. Defaults to <code>ENONIC_API</code>; override when media is served from another host, such as a CDN. Published pages reference this location directly. Draft media is requested through the front end&#8217;s <a href="rich-text.ahtml#media-proxy">/api/media proxy</a>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ENONIC_ADMIN</code></p></td>
@@ -542,7 +542,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

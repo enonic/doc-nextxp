@@ -510,7 +510,7 @@ Use <code>default</code> name to override the default values.
 <h2 id="defaults"><a class="link" href="#defaults">Defaults</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Without a matching configuration, the app falls back to:</p>
+<p>Without a matching configuration, the Next.XP app falls back to:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -519,7 +519,7 @@ nextjs.default.secret=mySecretKey</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>These values are suitable only for local development. In production mode, the default URL is not allowed in Content Studio&#8217;s Content Security Policy. Configure a unique secret in every shared or production environment.</p>
+<p>These fallback values are suitable only for local development. In production mode, only explicitly configured front-end URLs are added to Content Studio&#8217;s Content Security Policy. Configure a unique secret in every shared or production environment.</p>
 </div>
 </div>
 </div>
@@ -530,14 +530,14 @@ nextjs.default.secret=mySecretKey</code></pre>
 <p>The URL is used by the XP server and by the editor&#8217;s browser, which loads the preview directly. Use a hostname reachable from every XP cluster node and from editors' browsers. Avoid a trailing slash, use HTTPS outside a trusted local network, and ensure any intermediary forwards cookies and query parameters.</p>
 </div>
 <div class="paragraph">
-<p>Configuration changes are read by the app without rebuilding it. Reopen or refresh the Content Studio preview after changing a target URL or secret. URL mappings fetched from the front end are cached per project for up to 24 hours.</p>
+<p>Configuration changes are read by the Next.XP app without rebuilding it. Reopen or refresh the Content Studio preview after changing a target URL or secret. URL mappings fetched from the front end are cached per project for up to 24 hours.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>

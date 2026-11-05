@@ -443,6 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#environment">Environment</a></li>
 <li><a href="#shared_secret">Shared secret</a></li>
+<li><a href="#exit-draft-mode">Exit Draft Mode button</a></li>
 <li><a href="#rendering_and_caching">Rendering and caching</a></li>
 </ul>
 </div>
@@ -505,6 +506,32 @@ ENONIC_API=http://localhost:8080/api
 </div>
 </div>
 <div class="sect1">
+<h2 id="exit-draft-mode"><a class="link" href="#exit-draft-mode">Exit Draft Mode button</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The starter enables the exit button by rendering <code>DraftModeIndicator</code> in <code>src/app/[locale]/[[&#8230;&#8203;contentPath]]/layout.tsx</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-tsx" data-lang="tsx">import {I18n} from '@enonic/nextjs-adapter';
+import DraftModeIndicator from '@enonic/nextjs-adapter/views/DraftModeIndicator';
+
+// In the layout's full-page output:
+&lt;DraftModeIndicator label={I18n.localize('draft-mode')}/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The button appears only when Draft Mode is active and the page is opened directly in a browser tab. It is hidden inside iframes, including Content Studio. Clicking it disables Draft Mode and reloads the current URL without the <code>xp</code> preview parameter, returning to published content.</p>
+</div>
+<div class="paragraph">
+<p>To disable the button in your front end, remove the <code>DraftModeIndicator</code> element and its import from the layout. Restore them to enable it again. There is no environment setting for this control. Removing the button does not disable Draft Mode or clear an existing draft cookie.</p>
+</div>
+<div class="paragraph">
+<p>Change the <code>draft-mode</code> phrase in <code>src/phrases/&lt;locale&gt;.json</code> to customize the label, or pass a literal <code>label</code>. See <a href="../adapter/views.ahtml#draft-mode-indicator">DraftModeIndicator</a> for the component reference.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="rendering_and_caching"><a class="link" href="#rendering_and_caching">Rendering and caching</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -521,7 +548,7 @@ ENONIC_API=http://localhost:8080/api
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-04 12:54:57 UTC
+Last updated 2026-11-05 14:29:33 UTC
 </div>
 </div>
 </body>
